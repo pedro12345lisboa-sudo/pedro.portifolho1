@@ -26,7 +26,7 @@ const CONFIG = {
   API_BASE:
     window.location.hostname === "localhost"
       ? "http://localhost:3000/api"
-      : "https://fortunate-possibility-production-3309.up.railway.app/api",
+      : "https://pedroportifolho-production.up.railway.app/api",
 
   /** Número WhatsApp no formato internacional sem + */
   WHATSAPP_NUMBER: "556199070566",
