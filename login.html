@@ -26,7 +26,7 @@
       --radius:       12px;
     }
 
-    html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #050712 0%, #0b1020 50%, #0f0a1a 100%); color: var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
     /* BG */
     .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
@@ -42,28 +42,28 @@
     .back:hover { color: var(--text); }
 
     /* CARD */
-    .card { width: 100%; max-width: 420px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem 2rem; box-shadow: 0 24px 64px rgba(0,0,0,0.4), 0 0 80px rgba(99,102,241,0.06); animation: slideUp .5s cubic-bezier(0.16,1,0.3,1) both; }
+    .card { width: 100%; max-width: 480px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem 2.5rem; box-shadow: 0 24px 64px rgba(0,0,0,0.4), 0 0 80px rgba(99,102,241,0.06); animation: slideUp .5s cubic-bezier(0.16,1,0.3,1) both; }
     @keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
     /* LOGO */
-    .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 1.75rem; }
-    .logo img { height: 52px; width: auto; }
-    .logo__fallback { display: flex; align-items: center; gap: .75rem; }
-    .logo__icon { width: 42px; height: 42px; background: linear-gradient(135deg,#6366f1,#8b5cf6); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #fff; }
-    .logo__text { font-weight: 700; font-size: 1.1rem; }
+    .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 2.25rem; }
+    .logo img { height: 60px; width: auto; }
+    .logo__fallback { display: flex; align-items: center; gap: 1rem; }
+    .logo__icon { width: 48px; height: 48px; background: linear-gradient(135deg,#6366f1,#8b5cf6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: #fff; }
+    .logo__text { font-weight: 700; font-size: 1.25rem; }
 
     /* TABS */
-    .tabs { display: flex; background: rgba(255,255,255,0.04); border-radius: 10px; padding: 4px; margin-bottom: 1.75rem; gap: 4px; }
-    .tab { flex: 1; padding: .6rem; border: none; border-radius: 8px; font-family: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; transition: all .2s; background: transparent; color: var(--text-muted); }
+    .tabs { display: flex; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 6px; margin-bottom: 2rem; gap: 6px; }
+    .tab { flex: 1; padding: .75rem 1rem; border: none; border-radius: 10px; font-family: inherit; font-size: .925rem; font-weight: 600; cursor: pointer; transition: all .2s; background: transparent; color: var(--text-muted); }
     .tab.active { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.35); }
 
     /* FORM */
-    .form { display: flex; flex-direction: column; gap: 1rem; }
-    .field { display: flex; flex-direction: column; gap: .4rem; }
-    .label { font-size: .8rem; font-weight: 600; color: var(--text-muted); }
+    .form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .field { display: flex; flex-direction: column; gap: .5rem; }
+    .label { font-size: .825rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.3px; }
     .input-wrap { position: relative; }
-    .input-wrap svg { position: absolute; left: .875rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); width: 16px; height: 16px; pointer-events: none; }
-    .input { width: 100%; padding: .75rem .875rem .75rem 2.5rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: inherit; font-size: .9rem; transition: border-color .2s, box-shadow .2s; outline: none; }
+    .input-wrap svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); width: 18px; height: 18px; pointer-events: none; }
+    .input { width: 100%; padding: .875rem 1rem .875rem 2.75rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: inherit; font-size: .95rem; transition: border-color .2s, box-shadow .2s; outline: none; }
     .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
     .input::placeholder { color: var(--text-dim); }
 
@@ -72,32 +72,32 @@
     .toggle-pass:hover { color: var(--text-muted); }
 
     /* BOTÃO PRINCIPAL */
-    .btn-primary { width: 100%; padding: .875rem; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: inherit; font-size: .95rem; font-weight: 700; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: .5rem; margin-top: .25rem; }
-    .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.35); }
+    .btn-primary { width: 100%; padding: 1rem 1.25rem; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: .75rem; margin-top: .5rem; letter-spacing: 0.5px; }
+    .btn-primary:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(99,102,241,0.4); }
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-    .btn-primary .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+    .btn-primary .spinner { width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
     .btn-primary.loading .spinner { display: block; }
     .btn-primary.loading .btn-label { display: none; }
     @keyframes spin { to{transform:rotate(360deg)} }
 
     /* DIVISOR */
-    .divider { display: flex; align-items: center; gap: 1rem; color: var(--text-dim); font-size: .8rem; margin: .25rem 0; }
+    .divider { display: flex; align-items: center; gap: 1.25rem; color: var(--text-dim); font-size: .825rem; margin: .75rem 0 1rem 0; }
     .divider::before, .divider::after { content:''; flex:1; height:1px; background: var(--border); }
 
     /* BOTÃO GOOGLE */
-    .btn-google { width: 100%; display: flex; align-items: center; justify-content: center; gap: .75rem; padding: .8rem 1.5rem; background: #fff; color: #1f2937; border: none; border-radius: var(--radius); font-size: .9rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: all .2s; }
-    .btn-google:hover { background: #f9fafb; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+    .btn-google { width: 100%; display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem 1.5rem; background: #fff; color: #1f2937; border: none; border-radius: var(--radius); font-size: .95rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: all .2s; }
+    .btn-google:hover { background: #f9fafb; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.3); }
     .btn-google:disabled { opacity:.6; cursor:not-allowed; transform:none; }
-    .btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .btn-google svg { width: 20px; height: 20px; flex-shrink: 0; }
 
     /* STATUS */
-    .status { padding: .75rem 1rem; border-radius: 10px; font-size: .85rem; font-weight: 500; text-align: center; display: none; margin-top: .5rem; }
+    .status { padding: .875rem 1.25rem; border-radius: 12px; font-size: .875rem; font-weight: 500; text-align: center; display: none; margin-top: 1rem; }
     .status.error { display:block; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#fca5a5; }
     .status.success { display:block; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); color:#86efac; }
 
     /* RODAPÉ */
-    .card__footer { margin-top: 1.5rem; text-align: center; font-size: .8rem; color: var(--text-dim); line-height: 1.6; }
+    .card__footer { margin-top: 1.75rem; text-align: center; font-size: .825rem; color: var(--text-dim); line-height: 1.7; }
     .card__footer a { color: var(--accent-light); text-decoration: none; }
     .card__footer a:hover { text-decoration: underline; }
 
@@ -132,14 +132,17 @@
     .requirement-icon { width: 14px; height: 14px; flex-shrink: 0; }
 
     @media (max-width: 480px) {
-      .card { padding: 2rem 1.25rem; border-radius: 16px; }
-      .back { top: 1rem; left: 1rem; }
+      .card { padding: 2.25rem 1.5rem; border-radius: 20px; }
+      .back { top: 1rem; left: 1rem; font-size: .8rem; }
+      .logo img { height: 52px; }
+      .logo { margin-bottom: 1.75rem; }
+      .tabs { margin-bottom: 1.75rem; }
+      .btn-primary { padding: .9rem 1rem; font-size: .95rem; }
     }
   </style>
 </head>
 <body>
-  <!-- 3D Background Canvas -->
-  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <!-- Fundo decorativo leve (sem 3D) -->
 
 <div class="bg">
   <div class="bg__grid"></div>
@@ -253,15 +256,8 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="passwordValidation.js"></script>
+<script src="passwordValidation.js" defer></script>
 <script>
-  const SUPABASE_URL      = "https://gpmxniygvnwkqrgbcyjo.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_1KnTNp8Lhh9GfVhNPUKY6Q_HkpyMIBY";
-
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "pedro_sites_auth" }
-  });
-
   // Elementos
   const tabLogin    = document.getElementById("tabLogin");
   const tabRegister = document.getElementById("tabRegister");
@@ -279,36 +275,49 @@
 
   let mode = "login"; // "login" | "register"
 
-  // Inicializa validador de senha
-  const pwValidator = new PasswordValidator("https://pedro-portifolho.onrender.com/api/auth");
+  // Helpers (definidos antes de tudo, pois são usados pela UI)
+  function setLoading(on) {
+    btnSubmit.disabled = on;
+    btnSubmit.classList.toggle("loading", on);
+  }
 
-  // Se já logado, redireciona
-  client.auth.getSession().then(({ data }) => {
-    if (data?.session) window.location.href = "index.html";
-  });
+  function showStatus(msg, type) {
+    statusMsg.textContent = msg;
+    statusMsg.className   = `status ${type}`;
+  }
 
-  // Captura retorno OAuth
-  client.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN" && session) {
-      showStatus("Login realizado! Redirecionando...", "success");
-      setTimeout(() => { window.location.href = "index.html"; }, 1000);
-    }
-  });
+  function clearStatus() {
+    statusMsg.textContent = "";
+    statusMsg.className   = "status";
+  }
 
-  // Tabs
-  tabLogin.addEventListener("click", () => setMode("login"));
-  tabRegister.addEventListener("click", () => setMode("register"));
+  function translateError(msg) {
+    if (msg.includes("Invalid login")) return "E-mail ou senha incorretos.";
+    if (msg.includes("Email not confirmed")) return "Confirme seu e-mail antes de entrar.";
+    if (msg.includes("User already registered")) return "E-mail já cadastrado. Faça login.";
+    if (msg.includes("Password should be")) return "A senha deve ter pelo menos 6 caracteres.";
+    if (msg.includes("rate limit")) return "Muitas tentativas. Aguarde um momento.";
+    return "Ocorreu um erro. Tente novamente.";
+  }
 
-  function setMode(m) {
+  function setMode(m, keepStatus) {
     mode = m;
     tabLogin.classList.toggle("active", m === "login");
     tabRegister.classList.toggle("active", m === "register");
+    tabLogin.setAttribute("aria-selected", m === "login");
+    tabRegister.setAttribute("aria-selected", m === "register");
     fieldName.classList.toggle("visible", m === "register");
     forgotWrap.classList.toggle("forgot--hidden", m === "register");
     btnLabel.textContent = m === "login" ? "Entrar" : "Criar conta";
     inputPass.autocomplete = m === "login" ? "current-password" : "new-password";
-    clearStatus();
+    if (!keepStatus) clearStatus();
   }
+
+  // ===== UI básica (sempre funciona, mesmo se o Supabase falhar) =====
+
+  // Tabs (Entrar / Criar conta)
+  tabLogin.addEventListener("click", () => setMode("login"));
+  tabRegister.addEventListener("click", () => setMode("register"));
 
   // Toggle senha
   togglePass.addEventListener("click", () => {
@@ -320,12 +329,14 @@
   // Validação de força de senha em tempo real
   inputPass.addEventListener("input", () => {
     const password = inputPass.value;
-    
+
     if (!password) {
       document.getElementById("passwordStrength").classList.remove("visible");
       document.getElementById("passwordRequirements").classList.remove("visible");
       return;
     }
+
+    if (typeof pwValidator === "undefined") return;
 
     // Valida localmente
     const validation = pwValidator.validateStrength(password);
@@ -356,9 +367,53 @@
     }
   });
 
+  // ===== Validador de senha (não depende do Supabase) =====
+  let pwValidator;
+  try {
+    pwValidator = new PasswordValidator("/api/auth");
+  } catch (e) {
+    console.error("[LOGIN] Erro ao iniciar validador de senha:", e);
+  }
+
+  // ===== Supabase (login, cadastro, Google, recuperação) =====
+  let client = null;
+
+  if (typeof window.supabase === "undefined") {
+    console.error("[LOGIN] Biblioteca do Supabase não carregou.");
+    showStatus("Erro ao carregar o serviço de login. Recarregue a página ou tente novamente em instantes.", "error");
+    btnGoogle.disabled = true;
+  } else {
+    try {
+      const SUPABASE_URL      = "https://gpmxniygvnwkqrgbcyjo.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_1KnTNp8Lhh9GfVhNPUKY6Q_HkpyMIBY";
+
+      client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "pedro_sites_auth" }
+      });
+
+      // Se já logado, redireciona
+      client.auth.getSession().then(({ data }) => {
+        if (data?.session) window.location.href = "index.html";
+      });
+
+      // Captura retorno OAuth
+      client.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_IN" && session) {
+          showStatus("Login realizado! Redirecionando...", "success");
+          setTimeout(() => { window.location.href = "index.html"; }, 1000);
+        }
+      });
+    } catch (e) {
+      console.error("[LOGIN] Erro ao iniciar Supabase:", e);
+      showStatus("Erro ao iniciar o serviço de login. Recarregue a página.", "error");
+      btnGoogle.disabled = true;
+    }
+  }
+
   // Esqueci senha
   forgotLink.addEventListener("click", async (e) => {
     e.preventDefault();
+    if (!client) { showStatus("Serviço de login indisponível. Recarregue a página.", "error"); return; }
     const email = inputEmail.value.trim();
     if (!email) { showStatus("Digite seu e-mail primeiro.", "error"); return; }
     const { error } = await client.auth.resetPasswordForEmail(email, {
@@ -371,6 +426,9 @@
   // Submit
   document.getElementById("authForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    if (!client) { showStatus("Serviço de login indisponível. Recarregue a página e tente novamente.", "error"); return; }
+
     const email = inputEmail.value.trim();
     const pass  = inputPass.value;
     const name  = inputName.value.trim();
@@ -413,7 +471,7 @@
         return;
       }
 
-      const { error } = await client.auth.signUp({
+      const { data, error } = await client.auth.signUp({
         email, password: pass,
         options: { data: { full_name: name, name } }
       });
@@ -422,51 +480,55 @@
         showStatus(translateError(error.message), "error");
       } else {
         setLoading(false);
-        showStatus("Conta criada! Verifique seu e-mail para confirmar o cadastro.", "success");
+
+        if (data?.session) {
+          // Confirmação de e-mail desativada: já entra direto
+          showStatus("Conta criada com sucesso! Entrando...", "success");
+          setTimeout(() => { window.location.href = "index.html"; }, 1200);
+        } else {
+          // Precisa confirmar e-mail: leva o usuário para a tela de login pronta
+          showStatus("Conta criada! Verifique seu e-mail para confirmar e depois entre por aqui com sua senha.", "success");
+          setMode("login", true);
+          inputEmail.value = email;
+          inputPass.value = "";
+          document.getElementById("passwordStrength").classList.remove("visible");
+          document.getElementById("passwordRequirements").classList.remove("visible");
+          inputPass.focus();
+        }
       }
     }
   });
 
   // Google
   btnGoogle.addEventListener("click", async () => {
-    btnGoogle.disabled = true;
-    const { error } = await client.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin + "/index.html" }
-    });
-    if (error) {
-      showStatus("Erro ao abrir login com Google.", "error");
+    if (!client) { showStatus("Serviço de login indisponível. Recarregue a página.", "error"); return; }
+    try {
+      btnGoogle.disabled = true;
+      console.log("🔵 [LOGIN] Iniciando autenticação com Google...");
+      console.log("🔵 [LOGIN] Redirect URI:", window.location.origin + "/index.html");
+
+      const { error } = await client.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/index.html",
+          skipBrowserWarning: true
+        }
+      });
+
+      if (error) {
+        console.error("❌ [LOGIN] Erro OAuth:", error);
+        showStatus("❌ Erro: " + (error.message || "Não foi possível abrir o login com Google."), "error");
+        btnGoogle.disabled = false;
+      } else {
+        console.log("✅ [LOGIN] Redirecionando para Google...");
+      }
+    } catch (e) {
+      console.error("❌ [LOGIN] Exceção no OAuth:", e);
+      showStatus("❌ Erro: " + (e.message || "Erro inesperado ao fazer login com Google."), "error");
       btnGoogle.disabled = false;
     }
   });
-
-  // Helpers
-  function setLoading(on) {
-    btnSubmit.disabled = on;
-    btnSubmit.classList.toggle("loading", on);
-  }
-
-  function showStatus(msg, type) {
-    statusMsg.textContent = msg;
-    statusMsg.className   = `status ${type}`;
-  }
-
-  function clearStatus() {
-    statusMsg.textContent = "";
-    statusMsg.className   = "status";
-  }
-
-  function translateError(msg) {
-    if (msg.includes("Invalid login")) return "E-mail ou senha incorretos.";
-    if (msg.includes("Email not confirmed")) return "Confirme seu e-mail antes de entrar.";
-    if (msg.includes("User already registered")) return "E-mail já cadastrado. Faça login.";
-    if (msg.includes("Password should be")) return "A senha deve ter pelo menos 6 caracteres.";
-    if (msg.includes("rate limit")) return "Muitas tentativas. Aguarde um momento.";
-    return "Ocorreu um erro. Tente novamente.";
-  }
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="three-bg.js" defer></script>
 </body>
 </html>
