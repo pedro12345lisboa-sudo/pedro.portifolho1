@@ -253,7 +253,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="passwordValidation.js" defer></script>
+<script src="passwordValidation.js"></script>
 <script>
   const SUPABASE_URL      = "https://gpmxniygvnwkqrgbcyjo.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_1KnTNp8Lhh9GfVhNPUKY6Q_HkpyMIBY";
@@ -280,7 +280,7 @@
   let mode = "login"; // "login" | "register"
 
   // Inicializa validador de senha
-  const pwValidator = new PasswordValidator("/api/auth");
+  const pwValidator = new PasswordValidator("https://pedro-portifolho.onrender.com/api/auth");
 
   // Se já logado, redireciona
   client.auth.getSession().then(({ data }) => {
