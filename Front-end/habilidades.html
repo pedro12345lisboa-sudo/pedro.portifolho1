@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Habilidades 3D | Pedro Sites</title>
+  <meta name="description" content="Explore as habilidades técnicas de Pedro de forma interativa com visualização 3D em tempo real." />
+  <meta name="theme-color" content="#050712" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text y='.9em' font-size='70' font-family='Inter' font-weight='700' fill='white' x='50%25' text-anchor='middle' dominant-baseline='auto' dy='0.8em'>P</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .skills-container { padding: 80px 0; }
+    .skills-header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    .skills-header h1 {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .skills-header p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .skills-3d-wrapper {
+      position: relative;
+      margin-bottom: 80px;
+    }
+    #scene-wrap {
+      position: relative;
+      width: 100%;
+      height: 620px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0a0a14 0%, #1a1a2e 50%, #0f0f1e 100%);
+      border-radius: 24px;
+      cursor: grab;
+      box-shadow:
+        0 0 60px rgba(99, 102, 241, 0.25),
+        0 0 100px rgba(167, 139, 250, 0.12),
+        inset 0 0 50px rgba(34, 211, 238, 0.06);
+      border: 1.5px solid rgba(99, 102, 241, 0.2);
+      animation: sceneEntry 0.8s ease-out 0.2s both;
+    }
+    @keyframes sceneEntry {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #scene-wrap:hover {
+      box-shadow:
+        0 0 80px rgba(99, 102, 241, 0.35),
+        0 0 130px rgba(167, 139, 250, 0.18),
+        inset 0 0 50px rgba(34, 211, 238, 0.08);
+    }
+    #scene-wrap:active { cursor: grabbing; }
+    #canvas3d { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #overlay { position: absolute; inset: 0; pointer-events: none; }
+    .badge {
+      position: absolute;
+      padding: 10px 18px;
+      border-radius: 32px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      pointer-events: none;
+      transition: all .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-shadow: 0 2px 8px rgba(0,0,0,.8);
+      border: 1.5px solid rgba(255,255,255,.25);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,.3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: none;
+    }
+    .badge:hover {
+      transform: scale(1.1);
+      border-color: rgba(255,255,255,.5);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+    #hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.35);
+      font-size: 12px;
+      font-family: 'Segoe UI', sans-serif;
+      pointer-events: none;
+      letter-spacing: .06em;
+      font-weight: 500;
+      text-transform: uppercase;
+      animation: float-hint 3s ease-in-out infinite;
+    }
+    @keyframes float-hint {
+      0%, 100% { opacity: 0.35; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 0.6; transform: translateX(-50%) translateY(-8px); }
+    }
+    #title-area {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+    #title-area h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 32px;
+      font-weight: 800;
+      font-family: 'Segoe UI', sans-serif;
+      letter-spacing: .03em;
+      background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.3));
+    }
+    #title-area p {
+      margin: 12px 0 0;
+      color: rgba(255,255,255,.55);
+      font-size: 14px;
+      font-family: 'Segoe UI', sans-serif;
+      letter-spacing: .05em;
+      font-weight: 500;
+    }
+    .skills-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .skill-card {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(167, 139, 250, 0.05) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      padding: 28px;
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: cardEntry 0.8s ease-out both;
+    }
+    .skill-card:nth-child(1) { animation-delay: 0.3s; }
+    .skill-card:nth-child(2) { animation-delay: 0.4s; }
+    .skill-card:nth-child(3) { animation-delay: 0.5s; }
+    @keyframes cardEntry {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .skill-card:hover {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(167, 139, 250, 0.1) 100%);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
+      transform: translateY(-8px);
+    }
+    .skill-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .skill-card-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(99, 102, 241, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .skill-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      .skills-header h1 { font-size: 32px; }
+      #title-area h2 { font-size: 24px; }
+      #scene-wrap { height: 500px; }
+      .skills-info { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Background Canvas -->
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Topbar -->
+  <div class="topbar" aria-label="Informações de contato rápido">
+    <div class="container topbar__content">
+      <div class="topbar__left">
+        <span class="topbar__item topbar__item--dot" aria-hidden="true"></span>
+        <span class="topbar__item">Atendimento: Segunda a Sexta • 09:00–18:00 (Brasília)</span>
+      </div>
+      <div class="topbar__right">
+        <a class="topbar__item topbar__link" href="https://wa.me/556199070566?text=Ol%C3%A1%21+Vim+pelo+site+Pedro+Sites." target="_blank" rel="noopener noreferrer">WhatsApp →</a>
+        <span class="topbar__divider" aria-hidden="true">|</span>
+        <a class="topbar__item topbar__link" href="mailto:pedro12345lisboa@gmail.com">pedro12345lisboa@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" data-elevate aria-label="Cabeçalho principal">
+    <div class="container header__content">
+      <a class="brand" href="index.html" aria-label="Pedro Sites — Ir para o início">
+        <img src="logo.png" alt="Pedro Sites Logo" style="height:36px;width:auto;display:block;object-fit:contain;" />
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link" href="servicos.html">Serviços</a>
+        <a class="nav__link" href="portfolio.html">Portfólio</a>
+        <a class="nav__link" href="processo.html">Processo</a>
+        <a class="nav__link" href="sobre.html">Sobre</a>
+        <a class="nav__link is-active" href="habilidades.html" aria-current="page">Habilidades</a>
+        <a class="nav__link" href="avaliacoes.html">Avaliações</a>
+        <a class="nav__link" href="contato.html">Contato</a>
+      </nav>
+      <div class="header__actions">
+        <div class="user-avatar" id="userAvatar" aria-hidden="true" style="display:none">
+          <img class="user-avatar__img" id="userAvatarImg" src="" alt="Foto do usuário" loading="lazy" />
+          <div class="user-avatar__fallback" id="userAvatarFallback"></div>
+        </div>
+        <span class="user-badge" id="userBadge" aria-live="polite">
+          <span class="user-badge__dot" id="userBadgeDot"></span>
+          <span class="user-badge__text" id="userBadgeText">Não autenticado</span>
+        </span>
+        <a class="btn btn--ghost btn--login" href="login.html" aria-label="Entrar com Google" style="text-decoration:none">
+          <span class="btn__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="16" height="16">
+              <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.707 32.659 29.173 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+              <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.656 16.108 18.977 12 24 12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 16.318 4 9.656 8.327 6.306 14.691z"/>
+              <path fill="#4CAF50" d="M24 44c5.073 0 9.796-1.943 13.31-5.103l-6.14-5.193C29.168 35.091 26.715 36 24 36c-5.153 0-9.676-3.317-11.297-7.946l-6.52 5.023C9.49 39.556 16.227 44 24 44z"/>
+              <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.07 12.07 0 0 1-4.133 5.704l.003-.002 6.14 5.193C36.88 39.287 44 34 44 24c0-1.341-.138-2.651-.389-3.917z"/>
+            </svg>
+          </span>
+          <span class="btn__label" id="btnLoginLabel">Entrar</span>
+        </a>
+        <button class="hamburger" type="button" id="btnMenu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <aside class="mobile-nav" id="mobileNav" aria-hidden="true" aria-label="Menu mobile">
+    <div class="mobile-nav__panel" role="dialog" aria-modal="true" tabindex="-1">
+      <div class="mobile-nav__top">
+        <a class="brand" href="index.html"><img src="logo.png" alt="Pedro Sites Logo" style="height:32px;width:auto;display:block;object-fit:contain;" /></a>
+        <button class="icon-btn" type="button" id="btnCloseMenu" aria-label="Fechar menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-nav__links" aria-label="Navegação mobile">
+        <a class="mobile-nav__link" href="index.html">
+          <div class="mobile-nav__link-content">
+            <strong>Home</strong>
+            <span>Início da página</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="mobile-nav__link" href="servicos.html">
+          <div class="mobile-nav__link-content">
+            <strong>Serviços</strong>
+            <span>O que entregamos</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="mobile-nav__link" href="portfolio.html">
+          <div class="mobile-nav__link-content">
+            <strong>Portfólio</strong>
+            <span>Projetos e cases</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="mobile-nav__link" href="processo.html">
+          <div class="mobile-nav__link-content">
+            <strong>Processo</strong>
+            <span>Como trabalhamos</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="mobile-nav__link" href="sobre.html">
+          <div class="mobile-nav__link-content">
+            <strong>Sobre</strong>
+            <span>Nossa história</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="mobile-nav__link" href="habilidades.html">
+          <div class="mobile-nav__link-content">
+            <strong>Habilidades</strong>
+            <span>Explore 3D</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="mobile-nav__link" href="avaliacoes.html">
+          <div class="mobile-nav__link-content">
+            <strong>Avaliações</strong>
+            <span>O que dizem de nós</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="mobile-nav__link" href="contato.html">
+          <div class="mobile-nav__link-content">
+            <strong>Contato</strong>
+            <span>Solicitar orçamento</span>
+          </div>
+          <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+        </a>
+      </nav>
+      <div class="divider"></div>
+      <a class="btn btn--primary" href="contato.html" style="margin:1rem 1.5rem;display:inline-flex">Solicitar orçamento →</a>
+    </div>
+  </aside>
+
+  <main id="conteudo">
+    <section class="skills-container" aria-label="Habilidades e competências">
+      <div class="container">
+        <div class="skills-header">
+          <h1>Habilidades Técnicas</h1>
+          <p>Visualize interativamente as competências desenvolvidas ao longo da trajetória profissional</p>
+        </div>
+
+        <div class="skills-3d-wrapper">
+          <h2 class="sr-only">Área interativa 3D com objetos flutuantes mostrando as habilidades de Pedro como programador</h2>
+          <div id="scene-wrap">
+            <canvas id="canvas3d"></canvas>
+            <div id="overlay"></div>
+            <div id="title-area">
+              <h2>Pedro — Dev de Elite</h2>
+              <p>Arraste para girar · Clique nos objetos</p>
+            </div>
+            <div id="hint">✦ Arraste · Scroll para zoom</div>
+          </div>
+        </div>
+
+        <div class="skills-info">
+          <div class="skill-card">
+            <h3><span class="skill-card-icon">💻</span> Frontend</h3>
+            <p>HTML5, CSS3, JavaScript, React, Three.js. Especializado em criar interfaces responsivas e experiências imersivas com animações 3D.</p>
+          </div>
+          <div class="skill-card">
+            <h3><span class="skill-card-icon">⚙️</span> Backend</h3>
+            <p>Node.js, Python, Git. Desenvolvimento de APIs robustas, seguras e escaláveis com boas práticas de engenharia de software.</p>
+          </div>
+          <div class="skill-card">
+            <h3><span class="skill-card-icon">🎨</span> Design</h3>
+            <p>UI/UX, SQL, design responsivo. Criação de produtos digitais com foco em usabilidade, acessibilidade e conversão.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 60px 0;">
+      <div class="container">
+        <div style="text-align: center;">
+          <h2 style="font-size: 32px; font-weight: 700; color: var(--text-main); margin-bottom: 24px;">Pronto para inovar?</h2>
+          <p style="color: var(--text-muted); font-size: 16px; margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto;">Vamos transformar sua visão em uma solução digital premium.</p>
+          <a class="btn btn--primary" href="contato.html" style="display: inline-flex; text-decoration: none;">Solicitar orçamento →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" aria-label="Rodapé">
+    <div class="container footer__content">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <img src="logo.png" alt="Pedro Sites Logo" style="height:32px;width:auto;display:block;object-fit:contain;margin-bottom:12px;" />
+          <p style="color: var(--text-muted); margin: 0; font-size: 14px;">Criando experiências digitais premium que convertem.</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4 style="color: var(--text-main); font-size: 13px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em;">Navegação</h4>
+            <a href="index.html" style="color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 8px; font-size: 13px; transition: color 0.3s;">Home</a>
+            <a href="servicos.html" style="color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 8px; font-size: 13px; transition: color 0.3s;">Serviços</a>
+            <a href="portfolio.html" style="color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 8px; font-size: 13px; transition: color 0.3s;">Portfólio</a>
+          </div>
+          <div class="footer__col">
+            <h4 style="color: var(--text-main); font-size: 13px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em;">Contato</h4>
+            <a href="https://wa.me/556199070566" style="color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 8px; font-size: 13px; transition: color 0.3s;">WhatsApp</a>
+            <a href="mailto:pedro12345lisboa@gmail.com" style="color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 8px; font-size: 13px; transition: color 0.3s;">Email</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom" style="border-top: 1px solid var(--border-subtle); padding-top: 24px; margin-top: 24px; text-align: center;">
+        <p style="color: var(--text-faint); font-size: 12px; margin: 0;">© 2026 Pedro Sites. Todos os direitos reservados.</p>
+        <a class="footer__top-link" href="#conteudo" style="color: var(--accent); text-decoration: none; font-size: 12px; display: inline-block; margin-top: 12px;">Voltar ao topo ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Mobile nav
+    const btnMenu = document.getElementById('btnMenu');
+    const btnCloseMenu = document.getElementById('btnCloseMenu');
+    const mobileNav = document.getElementById('mobileNav');
+    btnMenu?.addEventListener('click', () => {
+      mobileNav.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+    btnCloseMenu?.addEventListener('click', () => {
+      mobileNav.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+  </script>
+  <script>
+    (function(){
+      const wrap = document.getElementById('scene-wrap');
+      const canvas = document.getElementById('canvas3d');
+      const overlay = document.getElementById('overlay');
+
+      const W = wrap.clientWidth, H = wrap.clientHeight;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.setSize(W, H);
+      renderer.setClearColor(0x0a0a14, 1);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 100);
+      camera.position.set(0, 0, 14);
+
+      // Lights
+      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+      const l1 = new THREE.PointLight(0x6366f1, 5, 40); l1.position.set(6, 8, 6); scene.add(l1);
+      const l2 = new THREE.PointLight(0xa78bfa, 4, 35); l2.position.set(-7, -5, 4); scene.add(l2);
+      const l3 = new THREE.PointLight(0x22d3ee, 3, 30); l3.position.set(0, 0, 10); scene.add(l3);
+
+      // Skills data
+      const skills = [
+        { label: 'HTML5', color: 0xe34f26, geo: 'octa', size: 1.1 },
+        { label: 'CSS3', color: 0x1572b6, geo: 'icosa', size: 1.0 },
+        { label: 'JavaScript', color: 0xf7df1e, geo: 'cube', size: 1.05 },
+        { label: 'React', color: 0x61dafb, geo: 'octa', size: 0.95 },
+        { label: 'Node.js', color: 0x339933, geo: 'tetra', size: 1.0 },
+        { label: 'Python', color: 0x3776ab, geo: 'icosa', size: 1.05 },
+        { label: 'UI/UX', color: 0xec4899, geo: 'octa', size: 0.9 },
+        { label: 'Three.js', color: 0x8b5cf6, geo: 'cube', size: 1.1 },
+        { label: 'Git', color: 0xf05032, geo: 'tetra', size: 0.85 },
+        { label: 'SQL', color: 0x00758f, geo: 'icosa', size: 0.95 },
+      ];
+
+      function makeGeo(type, s) {
+        if (type === 'octa') return new THREE.OctahedronGeometry(s, 0);
+        if (type === 'icosa') return new THREE.IcosahedronGeometry(s, 0);
+        if (type === 'tetra') return new THREE.TetrahedronGeometry(s, 0);
+        return new THREE.BoxGeometry(s*1.4, s*1.4, s*1.4);
+      }
+
+      // Spread positions in a sphere shell
+      const objects = [];
+      const golden = Math.PI * (3 - Math.sqrt(5));
+      skills.forEach((sk, i) => {
+        const t = i / skills.length;
+        const inclination = Math.acos(1 - 2 * t);
+        const azimuth = golden * i;
+        const r = 5.5;
+        const x = r * Math.sin(inclination) * Math.cos(azimuth);
+        const y = r * Math.cos(inclination) * 0.7;
+        const z = r * Math.sin(inclination) * Math.sin(azimuth) - 1;
+
+        const geo = makeGeo(sk.geo, sk.size);
+        const mat = new THREE.MeshStandardMaterial({
+          color: sk.color,
+          roughness: 0.08,
+          metalness: 0.85,
+          transparent: true,
+          opacity: 0.88,
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y, z);
+        mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+        scene.add(mesh);
+
+        // Floating badge
+        const badge = document.createElement('div');
+        badge.className = 'badge';
+        badge.textContent = sk.label;
+        badge.style.background = `rgba(${(sk.color>>16)&255},${(sk.color>>8)&255},${sk.color&255},.28)`;
+        badge.style.borderColor = `rgba(${(sk.color>>16)&255},${(sk.color>>8)&255},${sk.color&255},.55)`;
+        overlay.appendChild(badge);
+
+        objects.push({
+          mesh,
+          label: sk.label,
+          badge,
+          rotSpeed: new THREE.Vector3(
+            (Math.random()-.5)*.012,
+            (Math.random()-.5)*.015,
+            (Math.random()-.5)*.008
+          ),
+          floatY: Math.random()*Math.PI*2,
+          floatSpeed: 0.35 + Math.random()*.5,
+          basePos: new THREE.Vector3(x, y, z),
+          hovered: false,
+          color: sk.color
+        });
+      });
+
+      // Central glowing orb
+      const orbGeo = new THREE.IcosahedronGeometry(1.6, 2);
+      const orbMat = new THREE.MeshStandardMaterial({ color: 0x6366f1, roughness: 0.0, metalness: 1, transparent: true, opacity: 0.75 });
+      const orb = new THREE.Mesh(orbGeo, orbMat);
+      scene.add(orb);
+
+      // Wire frame ring around orb
+      const ringGeo = new THREE.TorusGeometry(2.4, 0.045, 8, 64);
+      const ringMat = new THREE.MeshStandardMaterial({ color: 0xa78bfa, roughness: 0.1, metalness: 0.9 });
+      const ring1 = new THREE.Mesh(ringGeo, ringMat); scene.add(ring1);
+      const ring2 = new THREE.Mesh(ringGeo, ringMat.clone()); scene.add(ring2);
+      ring2.rotation.x = Math.PI / 2;
+
+      // Raycaster
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      let hoveredObj = null;
+
+      function project(pos) {
+        const v = pos.clone().project(camera);
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (v.x * .5 + .5) * rect.width,
+          y: (-.5 * v.y + .5) * rect.height
+        };
+      }
+
+      // Drag orbit
+      let isDragging = false, prevX = 0, prevY = 0;
+      let rotX = 0, rotY = 0, velX = 0, velY = 0;
+
+      wrap.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; prevY = e.clientY; velX = velY = 0; });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+      window.addEventListener('mousemove', e => {
+        if (isDragging) {
+          velX = (e.clientX - prevX) * .005;
+          velY = (e.clientY - prevY) * .005;
+          rotY += velX; rotX += velY;
+          prevX = e.clientX; prevY = e.clientY;
+        }
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      });
+
+      // Touch
+      let touchX = 0, touchY = 0;
+      wrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; });
+      wrap.addEventListener('touchmove', e => {
+        velX = (e.touches[0].clientX - touchX) * .005;
+        velY = (e.touches[0].clientY - touchY) * .005;
+        rotY += velX; rotX += velY;
+        touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+      });
+
+      // Zoom
+      let zoom = 14;
+      wrap.addEventListener('wheel', e => { zoom = Math.max(6, Math.min(22, zoom + e.deltaY*.02)); });
+
+      // Click
+      wrap.addEventListener('click', e => {
+        if (!hoveredObj) return;
+        alert('Habilidade: ' + hoveredObj.label + '\n\nClique para mais detalhes sobre essa tecnologia.');
+      });
+
+      // Group that rotates
+      const group = new THREE.Group();
+      objects.forEach(o => { scene.remove(o.mesh); group.add(o.mesh); });
+      scene.add(group);
+
+      let t = 0;
+      function animate() {
+        requestAnimationFrame(animate);
+        t += 0.016;
+
+        // Inertia
+        if (!isDragging) { velX *= .92; velY *= .92; rotY += velX; rotX += velY; }
+        group.rotation.y = rotY + t * .08;
+        group.rotation.x = rotX;
+
+        // Orb pulse
+        const pulse = 1 + Math.sin(t * 1.5) * .06;
+        orb.scale.setScalar(pulse);
+        orbMat.opacity = 0.6 + Math.sin(t * 1.5) * .12;
+        ring1.rotation.z = t * .3;
+        ring2.rotation.y = -t * .25;
+
+        // Lights orbit
+        l1.position.x = Math.sin(t * .4) * 9; l1.position.z = Math.cos(t * .4) * 7;
+        l2.position.x = Math.cos(t * .3) * 8; l2.position.z = Math.sin(t * .3) * 6;
+
+        // Camera zoom
+        camera.position.z += (zoom - camera.position.z) * .08;
+
+        // Float & badge
+        objects.forEach(o => {
+          o.mesh.rotation.x += o.rotSpeed.x;
+          o.mesh.rotation.y += o.rotSpeed.y;
+          o.mesh.rotation.z += o.rotSpeed.z;
+          const floatOffset = Math.sin(t * o.floatSpeed + o.floatY) * .18;
+          o.mesh.position.y = o.basePos.y + floatOffset;
+
+          // World position
+          const wp = o.mesh.getWorldPosition(new THREE.Vector3());
+          const p = project(wp);
+          if (p.x > 0 && p.x < W && p.y > 0 && p.y < H) {
+            o.badge.style.display = 'block';
+            o.badge.style.left = (p.x - 32) + 'px';
+            o.badge.style.top = (p.y + 18) + 'px';
+          } else {
+            o.badge.style.display = 'none';
+          }
+        });
+
+        // Raycasting hover
+        raycaster.setFromCamera(mouse, camera);
+        const meshes = objects.map(o => o.mesh);
+        const hits = raycaster.intersectObjects(meshes);
+        hoveredObj = null;
+        objects.forEach(o => { o.mesh.scale.setScalar(o.hovered ? 1.25 : 1.0); });
+        if (hits.length) {
+          const obj = objects.find(o => o.mesh === hits[0].object);
+          if (obj) { obj.hovered = true; obj.mesh.scale.setScalar(1.4); hoveredObj = obj; wrap.style.cursor = 'pointer'; }
+        } else {
+          wrap.style.cursor = isDragging ? 'grabbing' : 'grab';
+        }
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
+  </script>
+</body>
+</html>
