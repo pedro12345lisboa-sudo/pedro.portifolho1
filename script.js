@@ -17,10 +17,10 @@
 
 const CONFIG = {
   /** URL do projeto Supabase */
-  SUPABASE_URL: "https://arnxpuuzuccxnfgtqfib.supabase.co",
+  SUPABASE_URL: "https://gpmxniygvnwkqrgbcyjo.supabase.co",
 
   /** Chave pública (anon) do Supabase — segura para uso no frontend */
-  SUPABASE_ANON_KEY: "sb_publishable_rdBr6dW_wW9QULsh0HPtRg_qzQADXrp",
+  SUPABASE_ANON_KEY: "sb_publishable_1KnTNp8Lhh9GfVhNPUKY6Q_HkpyMIBY",
 
   /** Base da API: localhost em dev, /api em produção */
   API_BASE:
