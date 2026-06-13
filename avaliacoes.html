@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Avaliações | Pedro Sites</title>
+  <meta name="description" content="Leia avaliações reais de clientes que confiaram na Pedro Sites para transformar sua presença digital." />
+  <meta name="theme-color" content="#050712" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text y='.9em' font-size='70' font-family='Inter' font-weight='700' fill='white' x='50%25' text-anchor='middle' dominant-baseline='auto' dy='0.8em'>P</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 3D Background Canvas -->
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Topbar -->
+  <div class="topbar" aria-label="Informações de contato rápido">
+    <div class="container topbar__content">
+      <div class="topbar__left">
+        <span class="topbar__item topbar__item--dot" aria-hidden="true"></span>
+        <span class="topbar__item">Atendimento: Segunda a Sexta • 09:00–18:00 (Brasília)</span>
+      </div>
+      <div class="topbar__right">
+        <a class="topbar__item topbar__link" href="https://wa.me/556199070566?text=Ol%C3%A1%21+Vim+pelo+site+Pedro+Sites." target="_blank" rel="noopener noreferrer">WhatsApp →</a>
+        <span class="topbar__divider" aria-hidden="true">|</span>
+        <a class="topbar__item topbar__link" href="mailto:pedro12345lisboa@gmail.com">pedro12345lisboa@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" data-elevate aria-label="Cabeçalho principal">
+    <div class="container header__content">
+      <a class="brand" href="index.html" aria-label="Pedro Sites — Ir para o início">
+        <img src="logo.png" alt="Pedro Sites Logo" style="height:36px;width:auto;display:block;object-fit:contain;" />
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <a class="nav__link" href="index.html">Home</a>
+          <a class="nav__link" href="servicos.html">Serviços</a>
+          <a class="nav__link" href="portfolio.html">Portfólio</a>
+          <a class="nav__link" href="processo.html">Processo</a>
+          <a class="nav__link" href="sobre.html">Sobre</a>
+          <a class="nav__link is-active" href="avaliacoes.html" aria-current="page">Avaliações</a>
+          <a class="nav__link" href="contato.html">Contato</a>
+      </nav>
+      <div class="header__actions">
+        <div class="user-avatar" id="userAvatar" aria-hidden="true" style="display:none">
+          <img class="user-avatar__img" id="userAvatarImg" src="" alt="Foto do usuário" loading="lazy" />
+          <div class="user-avatar__fallback" id="userAvatarFallback"></div>
+        </div>
+        <span class="user-badge" id="userBadge" aria-live="polite">
+          <span class="user-badge__dot" id="userBadgeDot"></span>
+          <span class="user-badge__text" id="userBadgeText">Não autenticado</span>
+        </span>
+        <a class="btn btn--ghost btn--login" href="login.html" aria-label="Entrar com Google" style="text-decoration:none">
+          <span class="btn__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="16" height="16">
+              <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.707 32.659 29.173 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+              <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.656 16.108 18.977 12 24 12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 16.318 4 9.656 8.327 6.306 14.691z"/>
+              <path fill="#4CAF50" d="M24 44c5.073 0 9.796-1.943 13.31-5.103l-6.14-5.193C29.168 35.091 26.715 36 24 36c-5.153 0-9.676-3.317-11.297-7.946l-6.52 5.023C9.49 39.556 16.227 44 24 44z"/>
+              <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.07 12.07 0 0 1-4.133 5.704l.003-.002 6.14 5.193C36.88 39.287 44 34 44 24c0-1.341-.138-2.651-.389-3.917z"/>
+            </svg>
+          </span>
+          <span class="btn__label" id="btnLoginLabel">Entrar</span>
+        </a>
+        <button class="hamburger" type="button" id="btnMenu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <aside class="mobile-nav" id="mobileNav" aria-hidden="true" aria-label="Menu mobile">
+    <div class="mobile-nav__panel" role="dialog" aria-modal="true" tabindex="-1">
+      <div class="mobile-nav__top">
+        <a class="brand" href="index.html"><img src="logo.png" alt="Pedro Sites Logo" style="height:32px;width:auto;display:block;object-fit:contain;" /></a>
+        <button class="icon-btn" type="button" id="btnCloseMenu" aria-label="Fechar menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-nav__links" aria-label="Navegação mobile">
+          <a class="mobile-nav__link" href="index.html">
+            <div class="mobile-nav__link-content">
+              <strong>Home</strong>
+              <span>Início da página</span>
+            </div>
+            <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="mobile-nav__link" href="servicos.html">
+            <div class="mobile-nav__link-content">
+              <strong>Serviços</strong>
+              <span>O que entregamos</span>
+            </div>
+            <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="mobile-nav__link" href="portfolio.html">
+            <div class="mobile-nav__link-content">
+              <strong>Portfólio</strong>
+              <span>Projetos e cases</span>
+            </div>
+            <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="mobile-nav__link" href="processo.html">
+            <div class="mobile-nav__link-content">
+              <strong>Processo</strong>
+              <span>Como trabalhamos</span>
+            </div>
+            <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="mobile-nav__link" href="sobre.html">
+            <div class="mobile-nav__link-content">
+              <strong>Sobre</strong>
+              <span>Nossa história</span>
+            </div>
+            <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="mobile-nav__link" href="avaliacoes.html">
+            <div class="mobile-nav__link-content">
+              <strong>Avaliações</strong>
+              <span>O que dizem de nós</span>
+            </div>
+            <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="mobile-nav__link" href="contato.html">
+            <div class="mobile-nav__link-content">
+              <strong>Contato</strong>
+              <span>Solicitar orçamento</span>
+            </div>
+            <span class="mobile-nav__arrow" aria-hidden="true">→</span>
+          </a></nav>
+      <div class="divider"></div>
+      <a class="btn btn--primary" href="contato.html" style="margin:1rem 1.5rem;display:inline-flex">Solicitar orçamento →</a>
+    </div>
+  </aside>
+
+  <main id="conteudo">
+
+    <section class="section" id="avaliacoes" aria-label="Avaliações de clientes">
+      <div class="container">
+        <header class="section__head" data-animate>
+          <span class="kicker">Avaliações</span>
+          <h2 class="section__title">O que nossos clientes dizem</h2>
+          <p class="section__desc">Avaliações reais de clientes que confiaram na Pedro Sites para transformar sua presença digital. As mensagens ficam salvas no servidor via Supabase.</p>
+        </header>
+
+        <div id="reviewsLoading" class="reviews__loading" aria-live="polite">
+          <div class="skeleton skeleton--review"></div>
+          <div class="skeleton skeleton--review"></div>
+          <div class="skeleton skeleton--review"></div>
+        </div>
+
+        <div class="reviews__layout" id="reviewsLayout" style="display:none">
+          <div class="card" data-animate>
+            <div class="reviews__header">
+              <div><h3 class="service__title" style="margin:0">Avaliações recentes</h3><p class="hint" style="margin-top:.3rem">Enviadas por clientes reais via formulário</p></div>
+              <div class="reviews__header-actions">
+                <div class="reviews__avg"><div class="reviews__stars" id="reviewsStars"></div><span class="reviews__avg-num" id="reviewsAvgNum">0.0</span><span class="reviews__avg-count" id="reviewsAvgCount">(0)</span></div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div id="reviewsList" class="reviews__list" aria-live="polite"><p class="hint" style="text-align:center;padding:2rem 0">Carregando avaliações...</p></div>
+            <div class="reviews__pagination" id="reviewsPagination" style="display:none">
+              <button class="btn btn--secondary" type="button" id="btnLoadMore">Carregar mais avaliações</button>
+            </div>
+          </div>
+
+          <div class="card" data-animate>
+            <h3 class="service__title" style="margin:0">Deixe sua avaliação</h3>
+            <p class="hint" style="margin-top:.35rem">Sua experiência ajuda outros clientes a decidirem. Obrigado por compartilhar.</p>
+            <div class="divider"></div>
+            <form class="form" id="reviewForm" novalidate>
+              <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+              <div class="field star-rating-field">
+                <label class="label">Sua nota <span class="label__required">*</span></label>
+                <div id="starRatingInput" aria-label="Selecione sua nota de 1 a 5 estrelas"></div>
+              </div>
+              <div class="field">
+                <label class="label" for="reviewName">Seu nome <span class="label__required">*</span></label>
+                <input class="input" id="reviewName" name="name" type="text" placeholder="Ex.: Ana Souza" minlength="2" maxlength="80" required autocomplete="name" aria-describedby="reviewNameError" />
+                <p class="field__error" id="reviewNameError" role="alert" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label class="label" for="reviewMessage">Mensagem <span class="label__required">*</span></label>
+                <textarea class="textarea" id="reviewMessage" name="message" placeholder="Conte como foi sua experiência com a Pedro Sites..." minlength="5" maxlength="500" required aria-describedby="reviewCounter reviewMessageError"></textarea>
+                <div class="field__footer"><p class="field__error" id="reviewMessageError" role="alert" aria-live="polite"></p><p class="hint" id="reviewCounter" aria-live="polite">0/500</p></div>
+              </div>
+              <button class="btn btn--primary" type="submit" id="btnSubmitReview">
+                <span class="btn__label">Enviar avaliação</span>
+                <span class="btn__spinner" id="reviewSpinner" style="display:none"></span>
+              </button>
+              <p class="hint" style="margin:0">Sua avaliação é salva com segurança via Supabase.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" aria-label="Rodapé do site">
+    <div class="footer__top">
+      <div class="container footer__top-inner">
+        <div class="footer__brand">
+          <a class="brand" href="index.html"><img src="logo.png" alt="Pedro Sites Logo" style="height:32px;width:auto;display:block;object-fit:contain;" /></a>
+          <p class="footer__brand-desc">Criamos sites premium que posicionam sua empresa como referência e transformam visitantes em clientes.</p>
+          <div class="footer__social">
+            <a class="footer__social-link" href="https://instagram.com/pedrosites" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a class="footer__social-link" href="https://www.linkedin.com/in/pedro-lisboa-3160883a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a class="footer__social-link" href="https://wa.me/556199070566" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer__nav-group">
+          <h4 class="footer__nav-title">Navegação</h4>
+          <nav>
+            <a class="footer__nav-link" href="index.html">Home</a>
+            <a class="footer__nav-link" href="servicos.html">Serviços</a>
+            <a class="footer__nav-link" href="portfolio.html">Portfólio</a>
+            <a class="footer__nav-link" href="processo.html">Processo</a>
+            <a class="footer__nav-link" href="sobre.html">Sobre</a>
+            <a class="footer__nav-link" href="avaliacoes.html">Avaliações</a>
+            <a class="footer__nav-link" href="faq.html">FAQ</a>
+            <a class="footer__nav-link" href="contato.html">Contato</a>
+          </nav>
+        </div>
+        <div class="footer__nav-group">
+          <h4 class="footer__nav-title">Serviços</h4>
+          <nav>
+            <a class="footer__nav-link" href="servicos.html">Landing Pages</a>
+            <a class="footer__nav-link" href="servicos.html">Sites Institucionais</a>
+            <a class="footer__nav-link" href="servicos.html">Manutenção</a>
+            <a class="footer__nav-link" href="servicos.html">SEO Técnico</a>
+            <a class="footer__nav-link" href="contato.html">Orçamento Grátis</a>
+          </nav>
+        </div>
+        <div class="footer__contact-group">
+          <h4 class="footer__nav-title">Contato</h4>
+          <a class="footer__contact-item" href="https://wa.me/556199070566" target="_blank" rel="noopener noreferrer">WhatsApp: (61) 99907-0566</a>
+          <a class="footer__contact-item" href="mailto:pedro12345lisboa@gmail.com">pedro12345lisboa@gmail.com</a>
+          <span class="footer__contact-item">Brasília — DF, Brasil</span>
+          <a class="btn btn--primary footer__cta" href="contato.html">Solicitar orçamento →</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>© <span id="year"></span> Pedro Sites. Todos os direitos reservados.</span>
+        <div class="footer__bottom-links">
+          <a class="footer__link" href="index.html">Voltar ao topo ↑</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flutuante -->
+  <a class="whatsapp" id="whatsappFloat" href="https://wa.me/556199070566" target="_blank" rel="noopener noreferrer" aria-label="Falar pelo WhatsApp">
+    <span class="whatsapp__icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.989.574 3.842 1.566 5.407L2 22l4.722-1.538A9.954 9.954 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.18a8.18 8.18 0 01-4.181-1.146l-.3-.178-3.1 1.01 1.04-3.004-.196-.308A8.17 8.17 0 013.82 12c0-4.516 3.672-8.18 8.18-8.18 4.51 0 8.18 3.664 8.18 8.18s-3.67 8.18-8.18 8.18z"/>
+      </svg>
+    </span>
+    <span class="whatsapp__text">
+      <strong>Fale conosco</strong>
+      <span>Resposta em minutos</span>
+    </span>
+    <span class="whatsapp__pulse" aria-hidden="true"></span>
+  </a>
+
+  <button class="to-top" type="button" id="btnToTop" aria-label="Voltar ao topo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="three-bg.js" defer></script>
+</body>
+</html>

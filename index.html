@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>Criação de Sites Profissionais em Brasília | Pedro Sites</title>
+  <meta name="description" content="Pedro Sites cria landing pages e sites institucionais em Brasília. Design moderno, SEO técnico, entrega em 14 dias e foco em conversão. Orçamento grátis!" />
+  <meta name="keywords" content="criação de sites brasília, landing page, site profissional, desenvolvimento web, pedro sites, sites que convertem, design web brasília" />
+  <meta name="author" content="Pedro Sites" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://pedrosites.com.br/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pedrosites.com.br/" />
+  <meta property="og:title" content="Criação de Sites Profissionais em Brasília | Pedro Sites" />
+  <meta property="og:description" content="Sites que transformam visitantes em clientes. Design moderno, SEO técnico e entrega em 14 dias." />
+  <meta property="og:image" content="https://pedrosites.com.br/logo.png" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Pedro Sites" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Criação de Sites Profissionais em Brasília | Pedro Sites" />
+  <meta name="twitter:description" content="Sites que transformam visitantes em clientes. Design moderno, SEO técnico e entrega em 14 dias." />
+  <meta name="twitter:image" content="https://pedrosites.com.br/logo.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Pedro Sites",
+    "description": "Criação de sites profissionais, landing pages e sites institucionais com design premium e foco em conversão.",
+    "url": "https://pedrosites.com.br",
+    "logo": "https://pedrosites.com.br/logo.png",
+    "telephone": "+55-61-99907-0566",
+    "email": "pedro12345lisboa@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Brasília",
+      "addressRegion": "DF",
+      "addressCountry": "BR"
+    },
+    "openingHours": "Mo-Fr 09:00-18:00",
+    "priceRange": "$$"
+  }
+  </script>
+
+  <meta name="theme-color" content="#050712" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text y='.9em' font-size='70' font-family='Inter' font-weight='700' fill='white' x='50%25' text-anchor='middle' dominant-baseline='auto' dy='0.8em'>P</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Topbar -->
+  <div class="topbar" aria-label="Informações de contato">
+    <div class="container topbar__content">
+      <div class="topbar__left">
+        <span class="topbar__item topbar__item--dot" aria-hidden="true"></span>
+        <span class="topbar__item">Disponível agora · Brasília, DF</span>
+      </div>
+      <div class="topbar__right">
+        <a class="topbar__item topbar__link" href="https://wa.me/556199070566" target="_blank" rel="noopener noreferrer">(61) 99907-0566</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" data-elevate aria-label="Cabeçalho principal">
+    <div class="container header__content">
+      <a class="brand" href="index.html" aria-label="Pedro Sites — Ir para o início">
+        <img src="logo.png" alt="Pedro Sites Logo" style="height:36px;width:auto;display:block;object-fit:contain;" />
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <a class="nav__link is-active" href="index.html" aria-current="page">Home</a>
+        <a class="nav__link" href="servicos.html">Serviços</a>
+        <a class="nav__link" href="portfolio.html">Portfólio</a>
+        <a class="nav__link" href="processo.html">Processo</a>
+        <a class="nav__link" href="sobre.html">Sobre</a>
+        <a class="nav__link" href="avaliacoes.html">Avaliações</a>
+        <a class="nav__link" href="contato.html">Contato</a>
+      </nav>
+      <div class="header__actions">
+        <div class="user-avatar" id="userAvatar" aria-hidden="true" style="display:none">
+          <img class="user-avatar__img" id="userAvatarImg" src="" alt="Foto do usuário" loading="lazy" />
+          <div class="user-avatar__fallback" id="userAvatarFallback"></div>
+        </div>
+        <span class="user-badge" id="userBadge" aria-live="polite">
+          <span class="user-badge__dot" id="userBadgeDot"></span>
+          <span class="user-badge__text" id="userBadgeText">Não autenticado</span>
+        </span>
+        <a class="btn btn--ghost btn--login" href="login.html" aria-label="Entrar com Google" style="text-decoration:none">
+          <span class="btn__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="16" height="16">
+              <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.707 32.659 29.173 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+              <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.656 16.108 18.977 12 24 12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 16.318 4 9.656 8.327 6.306 14.691z"/>
+              <path fill="#4CAF50" d="M24 44c5.073 0 9.796-1.943 13.31-5.103l-6.14-5.193C29.168 35.091 26.715 36 24 36c-5.153 0-9.676-3.317-11.297-7.946l-6.52 5.023C9.49 39.556 16.227 44 24 44z"/>
+              <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.07 12.07 0 0 1-4.133 5.704l.003-.002 6.14 5.193C36.88 39.287 44 34 44 24c0-1.341-.138-2.651-.389-3.917z"/>
+            </svg>
+          </span>
+          <span class="btn__label" id="btnLoginLabel">Entrar</span>
+        </a>
+        <button class="hamburger" type="button" id="btnMenu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <aside class="mobile-nav" id="mobileNav" aria-hidden="true" aria-label="Menu mobile">
+    <div class="mobile-nav__panel" role="dialog" aria-modal="true" tabindex="-1">
+      <div class="mobile-nav__top">
+        <a class="brand" href="index.html"><img src="logo.png" alt="Pedro Sites Logo" style="height:32px;width:auto;display:block;object-fit:contain;" /></a>
+        <button class="icon-btn" type="button" id="btnCloseMenu" aria-label="Fechar menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-nav__links" aria-label="Navegação mobile">
+        <a class="mobile-nav__link" href="index.html"><div class="mobile-nav__link-content"><strong>Home</strong><span>Início da página</span></div><span class="mobile-nav__arrow" aria-hidden="true">→</span></a>
+        <a class="mobile-nav__link" href="servicos.html"><div class="mobile-nav__link-content"><strong>Serviços</strong><span>O que entregamos</span></div><span class="mobile-nav__arrow" aria-hidden="true">→</span></a>
+        <a class="mobile-nav__link" href="portfolio.html"><div class="mobile-nav__link-content"><strong>Portfólio</strong><span>Projetos e cases</span></div><span class="mobile-nav__arrow" aria-hidden="true">→</span></a>
+        <a class="mobile-nav__link" href="processo.html"><div class="mobile-nav__link-content"><strong>Processo</strong><span>Como trabalhamos</span></div><span class="mobile-nav__arrow" aria-hidden="true">→</span></a>
+        <a class="mobile-nav__link" href="sobre.html"><div class="mobile-nav__link-content"><strong>Sobre</strong><span>Nossa história</span></div><span class="mobile-nav__arrow" aria-hidden="true">→</span></a>
+        <a class="mobile-nav__link" href="avaliacoes.html"><div class="mobile-nav__link-content"><strong>Avaliações</strong><span>O que dizem de nós</span></div><span class="mobile-nav__arrow" aria-hidden="true">→</span></a>
+        <a class="mobile-nav__link" href="contato.html"><div class="mobile-nav__link-content"><strong>Contato</strong><span>Solicitar orçamento</span></div><span class="mobile-nav__arrow" aria-hidden="true">→</span></a>
+      </nav>
+      <div class="divider"></div>
+      <a class="btn btn--primary" href="contato.html" style="margin:1rem 1.5rem;display:inline-flex">Solicitar orçamento →</a>
+    </div>
+  </aside>
+
+  <main id="conteudo">
+
+    <!-- HERO -->
+    <section class="home" id="home" aria-label="Início">
+      <div class="container">
+        <div class="hero-layout">
+
+          <div class="hero-copy">
+            <p class="hero-overline" data-animate>Brasília · Desenvolvimento Web</p>
+            <h1 class="hero-h1" data-animate>
+              Sites que fazem<br>
+              <em>o trabalho por você.</em>
+            </h1>
+            <p class="hero-desc" data-animate>
+              Crio landing pages e sites institucionais com foco em resultado — design pensado para converter, código limpo e entrega em até 14 dias.
+            </p>
+            <div class="hero-actions" data-animate>
+              <a class="btn btn--primary btn--lg" href="contato.html">Falar sobre meu projeto</a>
+              <a class="hero-link" href="portfolio.html">Ver portfólio <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="hero-stats" data-animate>
+              <div class="hero-stat">
+                <span class="hero-stat__num">30+</span>
+                <span class="hero-stat__label">projetos entregues</span>
+              </div>
+              <div class="hero-stat__sep" aria-hidden="true"></div>
+              <div class="hero-stat">
+                <span class="hero-stat__num">14</span>
+                <span class="hero-stat__label">dias de prazo médio</span>
+              </div>
+              <div class="hero-stat__sep" aria-hidden="true"></div>
+              <div class="hero-stat">
+                <span class="hero-stat__num">98%</span>
+                <span class="hero-stat__label">de satisfação</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual" data-animate aria-hidden="true">
+            <div class="hero-card">
+              <div class="hero-card__bar">
+                <span class="hero-card__dot hero-card__dot--r"></span>
+                <span class="hero-card__dot hero-card__dot--y"></span>
+                <span class="hero-card__dot hero-card__dot--g"></span>
+                <span class="hero-card__url">pedrosites.com.br</span>
+              </div>
+              <div class="hero-card__body">
+                <div class="hero-card__nav">
+                  <div class="hero-card__logo"></div>
+                  <div class="hero-card__navlinks">
+                    <span></span><span></span><span></span>
+                    <div class="hero-card__navbtn"></div>
+                  </div>
+                </div>
+                <div class="hero-card__content">
+                  <div class="hero-card__tag"></div>
+                  <div class="hero-card__line hero-card__line--xl"></div>
+                  <div class="hero-card__line hero-card__line--lg"></div>
+                  <div class="hero-card__line"></div>
+                  <div class="hero-card__btns">
+                    <div class="hero-card__btn hero-card__btn--fill"></div>
+                    <div class="hero-card__btn"></div>
+                  </div>
+                </div>
+                <div class="hero-card__grid">
+                  <div class="hero-card__tile"><div class="hero-card__tile-icon"></div><div class="hero-card__tile-line"></div><div class="hero-card__tile-line hero-card__tile-line--s"></div></div>
+                  <div class="hero-card__tile"><div class="hero-card__tile-icon"></div><div class="hero-card__tile-line"></div><div class="hero-card__tile-line hero-card__tile-line--s"></div></div>
+                  <div class="hero-card__tile"><div class="hero-card__tile-icon"></div><div class="hero-card__tile-line"></div><div class="hero-card__tile-line hero-card__tile-line--s"></div></div>
+                </div>
+              </div>
+              <div class="hero-badge hero-badge--a">
+                <span class="hero-badge__val">98</span>
+                <span class="hero-badge__key">Perf.</span>
+              </div>
+              <div class="hero-badge hero-badge--b">
+                <span class="hero-badge__val">100</span>
+                <span class="hero-badge__key">SEO</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PROOF BAR -->
+    <section class="proof-bar" id="numeros" aria-label="Indicadores de qualidade">
+      <div class="container proof-bar__inner">
+        <div class="proof-bar__stat" data-animate><span class="proof-bar__num" data-count="30">0</span><span class="proof-bar__plus">+</span><span class="proof-bar__label">Projetos entregues</span></div>
+        <div class="proof-bar__divider"></div>
+        <div class="proof-bar__stat" data-animate><span class="proof-bar__num" data-count="98">0</span><span class="proof-bar__plus">%</span><span class="proof-bar__label">Taxa de satisfação</span></div>
+        <div class="proof-bar__divider"></div>
+        <div class="proof-bar__stat" data-animate><span class="proof-bar__num" data-count="14">0</span><span class="proof-bar__label">Dias prazo médio</span></div>
+        <div class="proof-bar__divider"></div>
+        <div class="proof-bar__stat" data-animate><span class="proof-bar__num" data-count="100">0</span><span class="proof-bar__plus">%</span><span class="proof-bar__label">Mobile-first</span></div>
+      </div>
+    </section>
+
+    <!-- PREÇOS -->
+    <section class="section section--alt precos-section" id="precos" aria-label="Planos e preços">
+      <div class="container">
+        <div class="section__head" style="text-align:center;align-items:center">
+          <span class="kicker">Investimento</span>
+          <h2 class="section__title">Planos transparentes, sem surpresas</h2>
+          <p class="section__desc" style="text-align:center;max-width:56ch">Todos os planos incluem SEO técnico, suporte pós-entrega e revisões ilimitadas.</p>
+        </div>
+
+        <div class="precos__grid">
+          <div class="card precos__card" data-animate>
+            <div class="precos__card-header">
+              <h3 class="precos__card-name">Landing Page</h3>
+              <p class="precos__card-desc">Ideal para capturar leads e vender um produto ou serviço específico.</p>
+            </div>
+            <div class="precos__price">
+              <span class="precos__price-from">a partir de</span>
+              <span class="precos__price-val">R$ 497</span>
+            </div>
+            <ul class="precos__list">
+              <li>1 página otimizada</li>
+              <li>Design mobile-first</li>
+              <li>SEO técnico completo</li>
+              <li>Formulário de contato</li>
+              <li>Integração WhatsApp</li>
+              <li>Entrega em 7 dias</li>
+              <li>Revisões ilimitadas</li>
+            </ul>
+            <a class="btn btn--secondary" href="contato.html?plano=landing" style="width:100%;justify-content:center;margin-top:1rem">Solicitar orçamento →</a>
+          </div>
+
+          <div class="card precos__card precos__card--featured card--featured" data-animate>
+            <div class="card__featured-badge">Mais popular</div>
+            <div class="precos__card-header">
+              <h3 class="precos__card-name">Site Institucional</h3>
+              <p class="precos__card-desc">Para empresas que precisam transmitir autoridade e profissionalismo.</p>
+            </div>
+            <div class="precos__price">
+              <span class="precos__price-from">a partir de</span>
+              <span class="precos__price-val">R$ 997</span>
+            </div>
+            <ul class="precos__list">
+              <li>Até 5 páginas</li>
+              <li>Design premium exclusivo</li>
+              <li>SEO técnico avançado</li>
+              <li>Blog integrado</li>
+              <li>Google Analytics</li>
+              <li>Entrega em 14 dias</li>
+              <li>Suporte 30 dias grátis</li>
+            </ul>
+            <a class="btn btn--primary" href="contato.html?plano=institucional" style="width:100%;justify-content:center;margin-top:1rem">Solicitar orçamento →</a>
+          </div>
+
+          <div class="card precos__card" data-animate>
+            <div class="precos__card-header">
+              <h3 class="precos__card-name">Manutenção Mensal</h3>
+              <p class="precos__card-desc">Mantenha seu site sempre atualizado, seguro e performático.</p>
+            </div>
+            <div class="precos__price">
+              <span class="precos__price-from">a partir de</span>
+              <span class="precos__price-val">R$ 197<span style="font-size:1rem;font-weight:500">/mês</span></span>
+            </div>
+            <ul class="precos__list">
+              <li>Atualizações de conteúdo</li>
+              <li>Backup semanal</li>
+              <li>Monitoramento 24/7</li>
+              <li>Relatório mensal</li>
+              <li>Suporte prioritário</li>
+              <li>Otimizações de SEO</li>
+            </ul>
+            <a class="btn btn--secondary" href="contato.html?plano=manutencao" style="width:100%;justify-content:center;margin-top:1rem">Solicitar orçamento →</a>
+          </div>
+        </div>
+
+        <!-- Calculadora -->
+        <div class="calc-wrap" id="calculadora" data-animate>
+          <div class="calc-wrap__header">
+            <span class="kicker">Calculadora</span>
+            <h3 style="font-size:1.3rem;font-weight:700;color:#f9fafb;margin:0.5rem 0 0.25rem">Estime seu orçamento</h3>
+            <p style="color:rgba(156,163,175,0.9);font-size:0.9rem;margin:0">Selecione as opções e veja o valor estimado na hora.</p>
+          </div>
+          <div class="calc-body">
+            <div class="calc-group">
+              <label class="calc-label">Tipo de projeto</label>
+              <div class="calc-options" id="calcTipo">
+                <button class="calc-opt calc-opt--active" data-val="497" data-key="tipo">Landing Page <span>R$ 497+</span></button>
+                <button class="calc-opt" data-val="997" data-key="tipo">Site Institucional <span>R$ 997+</span></button>
+                <button class="calc-opt" data-val="1997" data-key="tipo">E-commerce <span>R$ 1.997+</span></button>
+              </div>
+            </div>
+            <div class="calc-group">
+              <label class="calc-label">Número de páginas</label>
+              <div class="calc-options" id="calcPaginas">
+                <button class="calc-opt calc-opt--active" data-val="0" data-key="paginas">1 página <span>incluso</span></button>
+                <button class="calc-opt" data-val="200" data-key="paginas">2–3 páginas <span>+R$ 200</span></button>
+                <button class="calc-opt" data-val="500" data-key="paginas">4–6 páginas <span>+R$ 500</span></button>
+                <button class="calc-opt" data-val="900" data-key="paginas">7+ páginas <span>+R$ 900</span></button>
+              </div>
+            </div>
+            <div class="calc-group">
+              <label class="calc-label">Extras</label>
+              <div class="calc-options" id="calcExtras">
+                <button class="calc-opt" data-val="150" data-key="blog">Blog integrado <span>+R$ 150</span></button>
+                <button class="calc-opt" data-val="100" data-key="analytics">Google Analytics <span>+R$ 100</span></button>
+                <button class="calc-opt" data-val="200" data-key="animations">Animações 3D <span>+R$ 200</span></button>
+                <button class="calc-opt" data-val="250" data-key="chat">Chat ao vivo <span>+R$ 250</span></button>
+                <button class="calc-opt" data-val="180" data-key="multilang">Multilíngue <span>+R$ 180</span></button>
+              </div>
+            </div>
+            <div class="calc-result">
+              <div class="calc-result__label">Estimativa de investimento</div>
+              <div class="calc-result__val" id="calcTotal">R$ 497</div>
+              <div class="calc-result__note">Valor estimado. O orçamento final é feito após briefing.</div>
+              <a class="btn btn--primary btn--lg" id="calcCta" href="contato.html">Quero este projeto →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D SKILLS -->
+    <section class="dev3d-section" id="habilidades" aria-label="Habilidades de programação">
+      <div class="dev3d-header">
+        <span class="dev3d-tag">Skills</span>
+        <h2 class="dev3d-title">Pedro — Dev de Elite</h2>
+        <p class="dev3d-sub">Arraste para girar · Clique em uma tecnologia para saber mais</p>
+      </div>
+      <div class="dev3d-wrap" id="dev3dWrap">
+        <canvas id="dev3dCanvas"></canvas>
+        <div id="dev3dOverlay" aria-hidden="true"></div>
+        <div class="dev3d-tooltip" id="dev3dTooltip" role="status" aria-live="polite"></div>
+        <p class="dev3d-hint" aria-hidden="true">✦ Arraste · Scroll para zoom · Clique para detalhes</p>
+      </div>
+      <div class="dev3d-cards">
+        <div class="dev3d-card"><strong>Sites rápidos</strong><span>Performance máxima em cada projeto</span></div>
+        <div class="dev3d-card"><strong>Design único</strong><span>Identidade visual personalizada</span></div>
+        <div class="dev3d-card"><strong>100% responsivo</strong><span>Perfeito em qualquer tela</span></div>
+        <div class="dev3d-card"><strong>Seguro e confiável</strong><span>Código limpo e bem estruturado</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" aria-label="Rodapé do site">
+    <div class="footer__top">
+      <div class="container footer__top-inner">
+        <div class="footer__brand">
+          <a class="brand" href="index.html"><img src="logo.png" alt="Pedro Sites Logo" style="height:32px;width:auto;display:block;object-fit:contain;" /></a>
+          <p class="footer__brand-desc">Criamos sites premium que posicionam sua empresa como referência e transformam visitantes em clientes.</p>
+          <div class="footer__social">
+            <a class="footer__social-link" href="https://instagram.com/pedrosites" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a class="footer__social-link" href="https://www.linkedin.com/in/pedro-lisboa-3160883a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a class="footer__social-link" href="https://wa.me/556199070566" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer__nav-group">
+          <h4 class="footer__nav-title">Navegação</h4>
+          <nav>
+            <a class="footer__nav-link" href="index.html">Home</a>
+            <a class="footer__nav-link" href="servicos.html">Serviços</a>
+            <a class="footer__nav-link" href="portfolio.html">Portfólio</a>
+            <a class="footer__nav-link" href="processo.html">Processo</a>
+            <a class="footer__nav-link" href="sobre.html">Sobre</a>
+            <a class="footer__nav-link" href="avaliacoes.html">Avaliações</a>
+            <a class="footer__nav-link" href="faq.html">FAQ</a>
+            <a class="footer__nav-link" href="contato.html">Contato</a>
+          </nav>
+        </div>
+        <div class="footer__nav-group">
+          <h4 class="footer__nav-title">Serviços</h4>
+          <nav>
+            <a class="footer__nav-link" href="servicos.html">Landing Pages</a>
+            <a class="footer__nav-link" href="servicos.html">Sites Institucionais</a>
+            <a class="footer__nav-link" href="servicos.html">Manutenção</a>
+            <a class="footer__nav-link" href="servicos.html">SEO Técnico</a>
+            <a class="footer__nav-link" href="contato.html">Orçamento Grátis</a>
+          </nav>
+        </div>
+        <div class="footer__contact-group">
+          <h4 class="footer__nav-title">Contato</h4>
+          <a class="footer__contact-item" href="https://wa.me/556199070566" target="_blank" rel="noopener noreferrer">WhatsApp: (61) 99907-0566</a>
+          <a class="footer__contact-item" href="mailto:pedro12345lisboa@gmail.com">pedro12345lisboa@gmail.com</a>
+          <span class="footer__contact-item">Brasília — DF, Brasil</span>
+          <a class="btn btn--primary footer__cta" href="contato.html">Solicitar orçamento →</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>© <span id="year"></span> Pedro Sites. Todos os direitos reservados.</span>
+        <div class="footer__bottom-links">
+          <a class="footer__link" href="index.html">Voltar ao topo ↑</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flutuante -->
+  <a class="whatsapp" id="whatsappFloat" href="https://wa.me/556199070566" target="_blank" rel="noopener noreferrer" aria-label="Falar pelo WhatsApp">
+    <span class="whatsapp__icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.989.574 3.842 1.566 5.407L2 22l4.722-1.538A9.954 9.954 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.18a8.18 8.18 0 01-4.181-1.146l-.3-.178-3.1 1.01 1.04-3.004-.196-.308A8.17 8.17 0 013.82 12c0-4.516 3.672-8.18 8.18-8.18 4.51 0 8.18 3.664 8.18 8.18s-3.67 8.18-8.18 8.18z"/>
+      </svg>
+    </span>
+    <span class="whatsapp__text">
+      <strong>Fale conosco</strong>
+      <span>Resposta em minutos</span>
+    </span>
+    <span class="whatsapp__pulse" aria-hidden="true"></span>
+  </a>
+
+  <button class="to-top" type="button" id="btnToTop" aria-label="Voltar ao topo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="three-bg.js" defer></script>
+  <script src="pedro-3d.js" defer></script>
+</body>
+</html>
