@@ -322,6 +322,7 @@ async function initAuth() {
 
     const { data } = await STATE.supabase.auth.getSession();
     STATE.session = data?.session || null;
+    STATE._initialSessionLoaded = true;
     
     if (STATE.session) {
       console.log("✅ [AUTH] Sessão ativa para:", STATE.session.user.email);
@@ -335,7 +336,7 @@ async function initAuth() {
       STATE.session = session;
       console.log("🔄 [AUTH] Mudança de autenticação:", event);
       renderAuthUI(session);
-      if (event === "SIGNED_IN")
+      if (event === "SIGNED_IN" && !STATE._initialSessionLoaded)
         Toast.show(`Bem-vindo, ${getDisplayName(session?.user)}! 👋`, "success");
       if (event === "SIGNED_OUT")
         Toast.show("Até logo! Sessão encerrada.", "default");
