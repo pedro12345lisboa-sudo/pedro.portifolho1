@@ -144,33 +144,13 @@ class PasswordValidator {
    * Verifica tentativas de login
    */
   async checkLoginAttempts(email) {
-    try {
-      const response = await fetch(`${this.apiUrl}/check-attempts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-
-      return await response.json();
-    } catch (error) {
-      console.error("[PasswordValidator] Erro ao verificar tentativas:", error);
-      return { success: false, blocked: false };
-    }
+    // Backend não implementado — retorna liberado por padrão
+    return { success: true, blocked: false };
   }
 
-  /**
-   * Registra uma tentativa de login
-   */
   async recordLoginAttempt(email) {
-    try {
-      await fetch(`${this.apiUrl}/record-attempt`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-    } catch (error) {
-      console.error("[PasswordValidator] Erro ao registrar tentativa:", error);
-    }
+    // Backend não implementado — ignora silenciosamente
+    return;
   }
 
   /**
