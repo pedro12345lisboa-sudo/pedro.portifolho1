@@ -63,7 +63,7 @@
     .label { font-size: .825rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.3px; }
     .input-wrap { position: relative; }
     .input-wrap svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); width: 18px; height: 18px; pointer-events: none; }
-    .input { width: 100%; padding: .875rem 1rem .875rem 2.75rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: inherit; font-size: .95rem; transition: border-color .2s, box-shadow .2s; outline: none; }
+    .input { width: 100%; padding: .875rem 3rem .875rem 2.75rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: inherit; font-size: .95rem; transition: border-color .2s, box-shadow .2s; outline: none; }
     .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
     .input::placeholder { color: var(--text-dim); }
 
@@ -324,6 +324,9 @@
     const show = inputPass.type === "password";
     inputPass.type = show ? "text" : "password";
     togglePass.setAttribute("aria-label", show ? "Ocultar senha" : "Mostrar senha");
+    document.getElementById("eyeIcon").innerHTML = show
+      ? `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19M1 1l22 22"/><circle cx="12" cy="12" r="3" style="display:none"/>`
+      : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
   });
 
   // Validação de força de senha em tempo real
@@ -384,8 +387,8 @@
     btnGoogle.disabled = true;
   } else {
     try {
-      const SUPABASE_URL      = "https://gpmxniygvnwkqrgbcyjo.supabase.co";
-      const SUPABASE_ANON_KEY = "sb_publishable_1KnTNp8Lhh9GfVhNPUKY6Q_HkpyMIBY";
+      const SUPABASE_URL      = "https://lutmauhdvdcsblxuncbb.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh";
 
       client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "pedro_sites_auth" }
