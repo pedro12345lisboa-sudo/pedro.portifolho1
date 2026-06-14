@@ -303,32 +303,18 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="three-bg.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-  // Aguarda o script.js inicializar o Supabase antes de rodar
   const BUCKET = "avatares";
-  const SUPA_URL = "https://lutmauhdvdcsblxuncbb.supabase.co";
-  const SUPA_KEY = "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh";
+  const pfClient = window.supabase.createClient(
+    "https://lutmauhdvdcsblxuncbb.supabase.co",
+    "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh",
+    { auth: { persistSession: true, autoRefreshToken: true, storageKey: "pedro_sites_auth" } }
+  );
   let pfUser = null;
-  let pfClient = null;
 
-  // Cria o cliente diretamente, sem depender do script.js
-  async function pfInit() {
-    await new Promise(resolve => {
-      if (window.supabase) return resolve();
-      const check = setInterval(() => {
-        if (window.supabase) { clearInterval(check); resolve(); }
-      }, 100);
-    });
-
-    pfClient = window.supabase.createClient(SUPA_URL, SUPA_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, storageKey: "pedro_sites_auth" }
-    });
-
-    pfLoad();
-  }
+  function pfShowStatus(msg, type) {
     const el = document.getElementById("pfStatus");
     el.textContent = msg;
     el.className = "pf-status show " + (type === "ok" ? "ok" : "err");
@@ -351,7 +337,6 @@
 
   async function pfLoad() {
     const { data: { session } } = await pfClient.auth.getSession();
-
     document.getElementById("pfSpinner").style.display = "none";
 
     if (!session) {
@@ -370,95 +355,68 @@
 
     const provider = pfUser.app_metadata?.provider || "email";
     document.getElementById("pfProvider").innerHTML =
-      `<span class="pf-badge">${provider === "google" ? "🌐 Google" : "✉️ E-mail"}</span>`;
+      provider === "google"
+        ? '<span class="pf-badge">🌐 Google</span>'
+        : '<span class="pf-badge">✉️ E-mail</span>';
 
-    // Busca perfil no banco
     const { data: profile } = await pfClient
-      .from("profiles")
-      .select("full_name, avatar_url")
-      .eq("id", pfUser.id)
-      .single();
+      .from("profiles").select("full_name, avatar_url")
+      .eq("id", pfUser.id).single();
 
     const nome = profile?.full_name || pfUser.user_metadata?.full_name || "";
     document.getElementById("pfNome").value = nome;
     pfSetAvatar(profile?.avatar_url, nome);
   }
 
-  // Upload de foto
   document.getElementById("avatarFile").addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (!file || !pfUser) return;
-
     if (file.size > 2 * 1024 * 1024) { pfShowStatus("Imagem muito grande. Máx. 2 MB.", "err"); return; }
     if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { pfShowStatus("Use JPG, PNG ou WEBP.", "err"); return; }
 
     const prog = document.getElementById("pfProgress");
     const bar = document.getElementById("pfProgressBar");
-    prog.classList.add("show");
-    bar.style.width = "30%";
+    prog.classList.add("show"); bar.style.width = "30%";
 
     const ext = file.name.split(".").pop();
-    const path = `${pfUser.id}/avatar.${ext}`;
-
+    const path = pfUser.id + "/avatar." + ext;
     await pfClient.storage.from(BUCKET).remove([path]);
     bar.style.width = "60%";
 
     const { error } = await pfClient.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
-    if (error) { pfShowStatus("Erro ao enviar foto.", "err"); prog.classList.remove("show"); return; }
+    if (error) { pfShowStatus("Erro: " + error.message, "err"); prog.classList.remove("show"); return; }
 
     bar.style.width = "85%";
     const { data: { publicUrl } } = pfClient.storage.from(BUCKET).getPublicUrl(path);
-
     await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, avatar_url: publicUrl });
-
     bar.style.width = "100%";
     setTimeout(() => prog.classList.remove("show"), 600);
-
     pfSetAvatar(publicUrl, document.getElementById("pfNome").value);
-
-    // Atualiza o avatar no nav do site também
-    const navImg = document.getElementById("userAvatarImg");
-    const navInit = document.getElementById("userAvatarFallback");
-    if (navImg) { navImg.src = publicUrl + "?t=" + Date.now(); navImg.style.display = "block"; }
-    if (navInit) navInit.style.display = "none";
-
     pfShowStatus("Foto atualizada!", "ok");
     e.target.value = "";
   });
 
-  // Salvar nome
   document.getElementById("pfBtnSalvar").addEventListener("click", async () => {
+    if (!pfUser) { pfShowStatus("Sessão expirada. Recarregue a página.", "err"); return; }
     const nome = document.getElementById("pfNome").value.trim();
     if (!nome) { pfShowStatus("Digite seu nome.", "err"); return; }
-    if (!pfClient) { pfShowStatus("Aguarde o carregamento. Tente novamente.", "err"); return; }
-
     const btn = document.getElementById("pfBtnSalvar");
     btn.disabled = true; btn.textContent = "Salvando...";
-
     const { error } = await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, full_name: nome });
-
     btn.disabled = false; btn.textContent = "Salvar alterações";
-
-    if (error) { pfShowStatus("Erro ao salvar: " + error.message, "err"); }
-    else {
-      document.getElementById("pfAvatarInit").textContent = nome[0].toUpperCase();
-      const badgeText = document.getElementById("userBadgeText");
-      if (badgeText) badgeText.textContent = nome.split(" ")[0];
-      pfShowStatus("Nome salvo com sucesso!", "ok");
-    }
+    if (error) { pfShowStatus("Erro: " + error.message, "err"); }
+    else { document.getElementById("pfAvatarInit").textContent = nome[0].toUpperCase(); pfShowStatus("Nome salvo!", "ok"); }
   });
 
-  // Sair
   document.getElementById("pfBtnSair").addEventListener("click", async () => {
     await pfClient.auth.signOut();
     window.location.href = "index.html";
   });
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", pfInit);
-  } else {
-    pfInit();
-  }
+  pfLoad();
   </script>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="three-bg.js" defer></script>
 </body>
 </html>
