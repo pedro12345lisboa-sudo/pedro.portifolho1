@@ -302,16 +302,16 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-  const BUCKET = "avatares";
   const pfClient = window.supabase.createClient(
     "https://lutmauhdvdcsblxuncbb.supabase.co",
     "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh",
     { auth: { persistSession: true, autoRefreshToken: true, storageKey: "pedro_sites_auth" } }
   );
+  const BUCKET = "avatares";
   let pfUser = null;
 
   function pfShowStatus(msg, type) {
@@ -336,79 +336,89 @@
   }
 
   async function pfLoad() {
-    const { data: { session } } = await pfClient.auth.getSession();
-    document.getElementById("pfSpinner").style.display = "none";
+    try {
+      const { data: { session } } = await pfClient.auth.getSession();
+      document.getElementById("pfSpinner").style.display = "none";
 
-    if (!session) {
+      if (!session) {
+        document.getElementById("pfNologin").classList.add("show");
+        return;
+      }
+
+      pfUser = session.user;
+      document.getElementById("pfContent").style.display = "flex";
+      document.getElementById("pfEmail").value = pfUser.email || "";
+
+      const created = pfUser.created_at
+        ? new Date(pfUser.created_at).toLocaleDateString("pt-BR", { day:"2-digit", month:"long", year:"numeric" })
+        : "—";
+      document.getElementById("pfMembro").textContent = created;
+
+      const provider = pfUser.app_metadata?.provider || "email";
+      document.getElementById("pfProvider").innerHTML =
+        provider === "google"
+          ? '<span class="pf-badge">🌐 Google</span>'
+          : '<span class="pf-badge">✉️ E-mail</span>';
+
+      const { data: profile } = await pfClient
+        .from("profiles").select("full_name, avatar_url")
+        .eq("id", pfUser.id).single();
+
+      const nome = profile?.full_name || pfUser.user_metadata?.full_name || "";
+      document.getElementById("pfNome").value = nome;
+      pfSetAvatar(profile?.avatar_url, nome);
+    } catch(err) {
+      console.error("Erro ao carregar perfil:", err);
+      document.getElementById("pfSpinner").style.display = "none";
       document.getElementById("pfNologin").classList.add("show");
-      return;
     }
-
-    pfUser = session.user;
-    document.getElementById("pfContent").style.display = "flex";
-    document.getElementById("pfEmail").value = pfUser.email || "";
-
-    const created = pfUser.created_at
-      ? new Date(pfUser.created_at).toLocaleDateString("pt-BR", { day:"2-digit", month:"long", year:"numeric" })
-      : "—";
-    document.getElementById("pfMembro").textContent = created;
-
-    const provider = pfUser.app_metadata?.provider || "email";
-    document.getElementById("pfProvider").innerHTML =
-      provider === "google"
-        ? '<span class="pf-badge">🌐 Google</span>'
-        : '<span class="pf-badge">✉️ E-mail</span>';
-
-    const { data: profile } = await pfClient
-      .from("profiles").select("full_name, avatar_url")
-      .eq("id", pfUser.id).single();
-
-    const nome = profile?.full_name || pfUser.user_metadata?.full_name || "";
-    document.getElementById("pfNome").value = nome;
-    pfSetAvatar(profile?.avatar_url, nome);
   }
 
-  document.getElementById("avatarFile").addEventListener("change", async (e) => {
+  document.getElementById("avatarFile").addEventListener("change", async function(e) {
     const file = e.target.files[0];
     if (!file || !pfUser) return;
-    if (file.size > 2 * 1024 * 1024) { pfShowStatus("Imagem muito grande. Máx. 2 MB.", "err"); return; }
+    if (file.size > 2 * 1024 * 1024) { pfShowStatus("Imagem muito grande. Max 2 MB.", "err"); return; }
     if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { pfShowStatus("Use JPG, PNG ou WEBP.", "err"); return; }
 
     const prog = document.getElementById("pfProgress");
     const bar = document.getElementById("pfProgressBar");
-    prog.classList.add("show"); bar.style.width = "30%";
+    prog.classList.add("show");
+    bar.style.width = "30%";
 
     const ext = file.name.split(".").pop();
     const path = pfUser.id + "/avatar." + ext;
     await pfClient.storage.from(BUCKET).remove([path]);
     bar.style.width = "60%";
 
-    const { error } = await pfClient.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
-    if (error) { pfShowStatus("Erro: " + error.message, "err"); prog.classList.remove("show"); return; }
+    const res = await pfClient.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
+    if (res.error) { pfShowStatus("Erro: " + res.error.message, "err"); prog.classList.remove("show"); return; }
 
     bar.style.width = "85%";
-    const { data: { publicUrl } } = pfClient.storage.from(BUCKET).getPublicUrl(path);
+    const urlRes = pfClient.storage.from(BUCKET).getPublicUrl(path);
+    const publicUrl = urlRes.data.publicUrl;
     await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, avatar_url: publicUrl });
     bar.style.width = "100%";
-    setTimeout(() => prog.classList.remove("show"), 600);
+    setTimeout(function() { prog.classList.remove("show"); }, 600);
     pfSetAvatar(publicUrl, document.getElementById("pfNome").value);
     pfShowStatus("Foto atualizada!", "ok");
     e.target.value = "";
   });
 
-  document.getElementById("pfBtnSalvar").addEventListener("click", async () => {
-    if (!pfUser) { pfShowStatus("Sessão expirada. Recarregue a página.", "err"); return; }
+  document.getElementById("pfBtnSalvar").addEventListener("click", async function() {
+    if (!pfUser) { pfShowStatus("Sessao expirada. Recarregue a pagina.", "err"); return; }
     const nome = document.getElementById("pfNome").value.trim();
     if (!nome) { pfShowStatus("Digite seu nome.", "err"); return; }
     const btn = document.getElementById("pfBtnSalvar");
-    btn.disabled = true; btn.textContent = "Salvando...";
-    const { error } = await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, full_name: nome });
-    btn.disabled = false; btn.textContent = "Salvar alterações";
-    if (error) { pfShowStatus("Erro: " + error.message, "err"); }
+    btn.disabled = true;
+    btn.textContent = "Salvando...";
+    const res = await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, full_name: nome });
+    btn.disabled = false;
+    btn.textContent = "Salvar alteracoes";
+    if (res.error) { pfShowStatus("Erro: " + res.error.message, "err"); }
     else { document.getElementById("pfAvatarInit").textContent = nome[0].toUpperCase(); pfShowStatus("Nome salvo!", "ok"); }
   });
 
-  document.getElementById("pfBtnSair").addEventListener("click", async () => {
+  document.getElementById("pfBtnSair").addEventListener("click", async function() {
     await pfClient.auth.signOut();
     window.location.href = "index.html";
   });
