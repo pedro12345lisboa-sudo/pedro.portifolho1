@@ -425,6 +425,7 @@
   document.getElementById("pfBtnSalvar").addEventListener("click", async () => {
     const nome = document.getElementById("pfNome").value.trim();
     if (!nome) { pfShowStatus("Digite seu nome.", "err"); return; }
+    if (!pfClient) { pfShowStatus("Aguarde o carregamento. Tente novamente.", "err"); return; }
 
     const btn = document.getElementById("pfBtnSalvar");
     btn.disabled = true; btn.textContent = "Salvando...";
@@ -433,10 +434,9 @@
 
     btn.disabled = false; btn.textContent = "Salvar alterações";
 
-    if (error) { pfShowStatus("Erro ao salvar.", "err"); }
+    if (error) { pfShowStatus("Erro ao salvar: " + error.message, "err"); }
     else {
       document.getElementById("pfAvatarInit").textContent = nome[0].toUpperCase();
-      // Atualiza nome no badge do nav
       const badgeText = document.getElementById("userBadgeText");
       if (badgeText) badgeText.textContent = nome.split(" ")[0];
       pfShowStatus("Nome salvo com sucesso!", "ok");
@@ -449,11 +449,19 @@
     window.location.href = "index.html";
   });
 
-  // Inicia após DOM carregado
+  // Inicia após DOM e script.js carregados
+  function tryPfLoad() {
+    if (window.STATE?.supabase) {
+      pfLoad();
+    } else {
+      setTimeout(tryPfLoad, 150);
+    }
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", pfLoad);
+    document.addEventListener("DOMContentLoaded", tryPfLoad);
   } else {
-    pfLoad();
+    tryPfLoad();
   }
   </script>
 </body>
