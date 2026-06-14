@@ -437,21 +437,43 @@ function renderAuthUI(session) {
   if (avatarWrap) {
     avatarWrap.style.display = isLoggedIn ? "flex" : "none";
     avatarWrap.setAttribute("aria-hidden", isLoggedIn ? "false" : "true");
+    avatarWrap.style.cursor = isLoggedIn ? "pointer" : "default";
+    avatarWrap.onclick = isLoggedIn ? () => { window.location.href = "perfil.html"; } : null;
+    avatarWrap.title = isLoggedIn ? "Editar perfil" : "";
   }
 
   if (isLoggedIn && user) {
-    const photoUrl =
-      user.user_metadata?.avatar_url || user.user_metadata?.picture;
-
-    if (avatarImg && photoUrl) {
-      avatarImg.src = photoUrl;
-      avatarImg.alt = `Foto de ${getDisplayName(user)}`;
-      avatarImg.style.display = "block";
-      if (avatarFallback) avatarFallback.style.display = "none";
-    } else if (avatarFallback) {
-      if (avatarImg) avatarImg.style.display = "none";
-      avatarFallback.style.display = "flex";
-      avatarFallback.textContent = getInitials(getDisplayName(user));
+    // Primeiro tenta buscar foto do banco (profiles), depois fallback pro Google
+    if (STATE.supabase) {
+      STATE.supabase.from("profiles")
+        .select("avatar_url, full_name")
+        .eq("id", user.id)
+        .single()
+        .then(({ data: profile }) => {
+          const photoUrl = profile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture;
+          if (avatarImg && photoUrl) {
+            avatarImg.src = photoUrl + "?t=" + Date.now();
+            avatarImg.alt = `Foto de ${getDisplayName(user)}`;
+            avatarImg.style.display = "block";
+            if (avatarFallback) avatarFallback.style.display = "none";
+          } else if (avatarFallback) {
+            if (avatarImg) avatarImg.style.display = "none";
+            avatarFallback.style.display = "flex";
+            avatarFallback.textContent = getInitials(profile?.full_name || getDisplayName(user));
+          }
+        });
+    } else {
+      const photoUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+      if (avatarImg && photoUrl) {
+        avatarImg.src = photoUrl;
+        avatarImg.alt = `Foto de ${getDisplayName(user)}`;
+        avatarImg.style.display = "block";
+        if (avatarFallback) avatarFallback.style.display = "none";
+      } else if (avatarFallback) {
+        if (avatarImg) avatarImg.style.display = "none";
+        avatarFallback.style.display = "flex";
+        avatarFallback.textContent = getInitials(getDisplayName(user));
+      }
     }
   }
 
