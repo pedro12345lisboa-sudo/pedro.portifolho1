@@ -267,7 +267,9 @@ main{
 <script>
 const SUPABASE_URL      = "https://lutmauhdvdcsblxuncbb.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh";
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "pedro_sites_auth" }
+});
 
 const BUCKET = "avatares";
 let currentUser = null;
