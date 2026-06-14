@@ -1,441 +1,460 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Meu Perfil | Pedro Sites</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#050712;--bg2:#080b18;--bg3:#0d1023;--card:#0f1228;
-  --border:rgba(99,102,241,.14);--border2:rgba(99,102,241,.28);
-  --accent:#6366f1;--accent2:#8b5cf6;--accent3:#a78bfa;
-  --green:#22c55e;--red:#ef4444;
-  --text:#f1f5f9;--muted:#94a3b8;
-  --radius:14px;--font:'Syne',sans-serif;--inter:'Inter',sans-serif;
-}
-html,body{min-height:100%;font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-
-/* BG */
-.bg-blobs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.blob{position:absolute;border-radius:50%;filter:blur(90px);animation:blobFloat 10s ease-in-out infinite}
-.blob-1{width:500px;height:500px;background:rgba(99,102,241,.08);top:-150px;left:-80px}
-.blob-2{width:420px;height:420px;background:rgba(139,92,246,.06);bottom:-100px;right:-60px;animation-delay:-5s}
-@keyframes blobFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-24px)}}
-
-/* TOPO */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.9rem 2rem;
-  background:rgba(5,7,18,.85);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(16px);
-}
-.nav-logo{font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-back{
-  display:flex;align-items:center;gap:.4rem;
-  font-size:.82rem;color:var(--muted);text-decoration:none;
-  transition:color .2s;
-}
-.nav-back:hover{color:var(--text)}
-
-/* LOADING */
-#loadingScreen{
-  position:fixed;inset:0;z-index:999;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;
-}
-.spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* MAIN */
-main{
-  position:relative;z-index:1;
-  min-height:100vh;padding:6rem 1rem 3rem;
-  display:flex;align-items:flex-start;justify-content:center;
-}
-.perfil-wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:1.5rem}
-
-/* CARD */
-.card{
-  background:linear-gradient(145deg,#0d1023,#080b18);
-  border:1px solid var(--border2);border-radius:22px;
-  padding:2rem;
-  box-shadow:0 24px 60px rgba(0,0,0,.5);
-}
-.card-title{font-size:1rem;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
-.card-title svg{opacity:.6}
-
-/* AVATAR */
-.avatar-section{display:flex;flex-direction:column;align-items:center;gap:1.25rem}
-.avatar-wrap{position:relative;width:110px;height:110px}
-.avatar-img{
-  width:110px;height:110px;border-radius:50%;object-fit:cover;
-  border:3px solid var(--border2);
-  box-shadow:0 0 0 4px rgba(99,102,241,.12),0 8px 24px rgba(0,0,0,.4);
-  background:#0d1023;
-}
-.avatar-placeholder{
-  width:110px;height:110px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:2.4rem;font-weight:800;color:#fff;
-  border:3px solid var(--border2);
-  box-shadow:0 0 0 4px rgba(99,102,241,.12),0 8px 24px rgba(0,0,0,.4);
-}
-.avatar-edit-btn{
-  position:absolute;bottom:2px;right:2px;
-  width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border:2px solid var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:transform .2s,box-shadow .2s;
-  box-shadow:0 4px 12px rgba(99,102,241,.4);
-}
-.avatar-edit-btn:hover{transform:scale(1.1);box-shadow:0 6px 16px rgba(99,102,241,.6)}
-.avatar-edit-btn svg{width:14px;height:14px;color:#fff}
-#fileInput{display:none}
-.avatar-upload-hint{font-size:.75rem;color:var(--muted);text-align:center}
-
-/* UPLOAD PROGRESS */
-.upload-progress{
-  width:100%;height:4px;background:var(--border);border-radius:999px;overflow:hidden;
-  display:none;margin-top:.5rem;
-}
-.upload-progress.visible{display:block}
-.upload-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;width:0%;transition:width .3s}
-
-/* FORM */
-.form-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
-.form-label{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
-.form-input{
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  border-radius:10px;padding:.75rem 1rem;color:var(--text);
-  font-family:var(--inter);font-size:.9rem;outline:none;
-  transition:border-color .2s,box-shadow .2s;width:100%;
-}
-.form-input:focus{border-color:rgba(99,102,241,.6);box-shadow:0 0 0 3px rgba(99,102,241,.12)}
-.form-input:disabled{opacity:.5;cursor:not-allowed}
-
-/* BOTÕES */
-.btn{
-  width:100%;padding:.85rem 1.5rem;border:none;border-radius:12px;
-  font-family:var(--font);font-size:.9rem;font-weight:700;
-  cursor:pointer;transition:all .2s;
-}
-.btn-primary{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;
-  box-shadow:0 8px 24px rgba(99,102,241,.35);
-}
-.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 12px 30px rgba(99,102,241,.5)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-danger{
-  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
-  color:#f87171;
-}
-.btn-danger:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
-
-/* STATUS */
-.status{
-  padding:.75rem 1rem;border-radius:10px;font-size:.85rem;font-family:var(--inter);
-  font-weight:500;display:none;margin-bottom:1rem;
-}
-.status.visible{display:block}
-.status.success{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#4ade80}
-.status.error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171}
-
-/* INFO ROW */
-.info-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:.75rem 0;border-bottom:1px solid var(--border);
-}
-.info-row:last-child{border-bottom:none}
-.info-label{font-size:.78rem;color:var(--muted);font-family:var(--inter)}
-.info-value{font-size:.88rem;color:var(--text);font-weight:600;font-family:var(--inter)}
-.badge-provider{
-  display:inline-flex;align-items:center;gap:.3rem;
-  background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);
-  color:var(--accent3);border-radius:999px;padding:.2rem .7rem;font-size:.72rem;font-weight:700;
-}
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Meu Perfil | Pedro Sites</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .perfil-page { padding: 7rem 1rem 4rem; min-height: 100vh; }
+    .perfil-container { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
+    .perfil-card {
+      background: rgba(15,18,40,.85);
+      border: 1px solid rgba(99,102,241,.2);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    }
+    .perfil-card__title {
+      font-size: .8rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: #94a3b8;
+      margin-bottom: 1.5rem; display: flex; align-items: center; gap: .5rem;
+    }
+    /* Avatar */
+    .avatar-area { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .avatar-ring {
+      position: relative; width: 110px; height: 110px; cursor: pointer;
+    }
+    .avatar-ring:hover .avatar-overlay { opacity: 1; }
+    .avatar-pic {
+      width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
+      border: 3px solid rgba(99,102,241,.4);
+      box-shadow: 0 0 0 4px rgba(99,102,241,.1), 0 8px 24px rgba(0,0,0,.5);
+      display: none;
+    }
+    .avatar-init {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: linear-gradient(135deg,#6366f1,#8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; font-weight: 800; color: #fff;
+      border: 3px solid rgba(99,102,241,.4);
+      box-shadow: 0 0 0 4px rgba(99,102,241,.1), 0 8px 24px rgba(0,0,0,.5);
+    }
+    .avatar-overlay {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(0,0,0,.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s;
+    }
+    .avatar-overlay svg { color: #fff; width: 24px; height: 24px; }
+    .avatar-hint { font-size: .75rem; color: #64748b; }
+    #avatarFile { display: none; }
+    .avatar-progress {
+      width: 100%; height: 3px; background: rgba(255,255,255,.08);
+      border-radius: 999px; overflow: hidden; display: none; margin-top: .25rem;
+    }
+    .avatar-progress.show { display: block; }
+    .avatar-progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg,#6366f1,#8b5cf6);
+      transition: width .3s;
+    }
+    /* Form */
+    .pf-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.1rem; }
+    .pf-label { font-size: .72rem; font-weight: 700; color: #94a3b8; letter-spacing: .05em; text-transform: uppercase; }
+    .pf-input {
+      width: 100%; padding: .75rem 1rem;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(99,102,241,.15);
+      border-radius: 10px; color: #f1f5f9; font-family: inherit; font-size: .9rem; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .pf-input:focus { border-color: rgba(99,102,241,.6); box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+    .pf-input:disabled { opacity: .45; cursor: not-allowed; }
+    /* Botões */
+    .pf-btn {
+      width: 100%; padding: .85rem 1.25rem; border: none; border-radius: 12px;
+      font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; transition: all .2s;
+    }
+    .pf-btn--primary {
+      background: linear-gradient(135deg,#6366f1,#8b5cf6); color: #fff;
+      box-shadow: 0 8px 20px rgba(99,102,241,.3);
+    }
+    .pf-btn--primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(99,102,241,.5); }
+    .pf-btn--primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .pf-btn--danger {
+      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.22); color: #f87171;
+    }
+    .pf-btn--danger:hover { background: rgba(239,68,68,.15); }
+    /* Status */
+    .pf-status {
+      padding: .7rem 1rem; border-radius: 10px; font-size: .85rem; font-weight: 500;
+      margin-bottom: 1rem; display: none;
+    }
+    .pf-status.show { display: block; }
+    .pf-status.ok { background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.2); color: #4ade80; }
+    .pf-status.err { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); color: #f87171; }
+    /* Info rows */
+    .pf-info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .7rem 0; border-bottom: 1px solid rgba(99,102,241,.1);
+      font-size: .85rem;
+    }
+    .pf-info-row:last-child { border-bottom: none; }
+    .pf-info-label { color: #64748b; }
+    .pf-info-value { color: #f1f5f9; font-weight: 600; }
+    .pf-badge {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.25);
+      color: #a78bfa; border-radius: 999px; padding: .15rem .65rem; font-size: .72rem; font-weight: 700;
+    }
+    /* Não logado */
+    .pf-nologin {
+      text-align: center; padding: 3rem 1rem;
+      display: none; flex-direction: column; align-items: center; gap: 1.25rem;
+    }
+    .pf-nologin.show { display: flex; }
+    .pf-nologin svg { color: #6366f1; opacity: .6; }
+    .pf-nologin p { color: #94a3b8; font-size: .95rem; }
+    .pf-nologin a { color: #818cf8; font-weight: 600; text-decoration: none; }
+    .pf-nologin a:hover { text-decoration: underline; }
+    /* Spinner */
+    .pf-spinner {
+      display: flex; align-items: center; justify-content: center; padding: 4rem 1rem;
+    }
+    .pf-spinner div {
+      width: 36px; height: 36px; border: 3px solid rgba(99,102,241,.2);
+      border-top-color: #6366f1; border-radius: 50%; animation: pfSpin .7s linear infinite;
+    }
+    @keyframes pfSpin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="bg-blobs">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-</div>
-
-<!-- Loading -->
-<div id="loadingScreen">
-  <div class="spinner"></div>
-  <span style="color:var(--muted);font-size:.85rem">Carregando perfil...</span>
-</div>
-
-<!-- Nav -->
-<nav>
-  <a href="index.html" class="nav-back">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    Voltar ao site
-  </a>
-  <span class="nav-logo">Pedro Sites</span>
-</nav>
-
-<main>
-  <div class="perfil-wrap">
-
-    <!-- CARD FOTO -->
-    <div class="card">
-      <div class="card-title">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        Foto de Perfil
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="container topbar__content">
+      <div class="topbar__left">
+        <span class="topbar__item topbar__item--dot" aria-hidden="true"></span>
+        <span class="topbar__item">Disponível agora · Brasília, DF</span>
       </div>
-
-      <div class="avatar-section">
-        <div class="avatar-wrap">
-          <div class="avatar-placeholder" id="avatarPlaceholder">?</div>
-          <img class="avatar-img" id="avatarImg" src="" alt="Foto de perfil" style="display:none"/>
-          <label class="avatar-edit-btn" for="fileInput" title="Trocar foto">
-            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </label>
-          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif"/>
-        </div>
-
-        <div class="upload-progress" id="uploadProgress">
-          <div class="upload-bar" id="uploadBar"></div>
-        </div>
-
-        <span class="avatar-upload-hint">JPG, PNG ou WEBP · máx. 2 MB</span>
+      <div class="topbar__right">
+        <a class="topbar__item topbar__link" href="https://wa.me/556199070566" target="_blank" rel="noopener">(61) 99907-0566</a>
       </div>
     </div>
-
-    <!-- CARD EDITAR NOME -->
-    <div class="card">
-      <div class="card-title">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        Editar Informações
-      </div>
-
-      <div id="statusMsg" class="status"></div>
-
-      <div class="form-group">
-        <label class="form-label" for="inputNome">Nome completo</label>
-        <input class="form-input" type="text" id="inputNome" placeholder="Seu nome" maxlength="80"/>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="inputEmail">E-mail</label>
-        <input class="form-input" type="email" id="inputEmail" disabled/>
-      </div>
-
-      <button class="btn btn-primary" id="btnSalvar">Salvar alterações</button>
-    </div>
-
-    <!-- CARD INFORMAÇÕES -->
-    <div class="card">
-      <div class="card-title">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Informações da Conta
-      </div>
-
-      <div class="info-row">
-        <span class="info-label">Membro desde</span>
-        <span class="info-value" id="infoMembro">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Login via</span>
-        <span class="info-value" id="infoProvider">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Status</span>
-        <span class="info-value" style="color:var(--green)">✓ Ativo</span>
-      </div>
-    </div>
-
-    <!-- CARD SAIR -->
-    <div class="card">
-      <button class="btn btn-danger" id="btnSair">Sair da conta</button>
-    </div>
-
   </div>
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL      = "https://lutmauhdvdcsblxuncbb.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh";
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "pedro_sites_auth" }
-});
+  <!-- Header -->
+  <header class="header" data-elevate>
+    <div class="container header__content">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Pedro Sites Logo" style="height:36px;width:auto;display:block;object-fit:contain;"/>
+      </a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link" href="servicos.html">Serviços</a>
+        <a class="nav__link" href="portfolio.html">Portfólio</a>
+        <a class="nav__link" href="processo.html">Processo</a>
+        <a class="nav__link" href="sobre.html">Sobre</a>
+        <a class="nav__link" href="avaliacoes.html">Avaliações</a>
+        <a class="nav__link" href="contato.html">Contato</a>
+      </nav>
+      <div class="header__actions">
+        <div class="user-avatar" id="userAvatar" aria-hidden="true" style="display:none">
+          <img class="user-avatar__img" id="userAvatarImg" src="" alt="Foto do usuário" loading="lazy"/>
+          <div class="user-avatar__fallback" id="userAvatarFallback"></div>
+        </div>
+        <span class="user-badge" id="userBadge">
+          <span class="user-badge__dot" id="userBadgeDot"></span>
+          <span class="user-badge__text" id="userBadgeText">Não autenticado</span>
+        </span>
+        <a class="btn btn--ghost btn--login" href="login.html" style="text-decoration:none">
+          <span class="btn__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="16" height="16">
+              <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.707 32.659 29.173 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+              <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.656 16.108 18.977 12 24 12c3.059 0 5.842 1.154 7.965 3.035l5.657-5.657C34.051 6.053 29.242 4 24 4 16.318 4 9.656 8.327 6.306 14.691z"/>
+              <path fill="#4CAF50" d="M24 44c5.073 0 9.796-1.943 13.31-5.103l-6.14-5.193C29.168 35.091 26.715 36 24 36c-5.153 0-9.676-3.317-11.297-7.946l-6.52 5.023C9.49 39.556 16.227 44 24 44z"/>
+              <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.07 12.07 0 0 1-4.133 5.704l6.14 5.193C36.88 39.287 44 34 44 24c0-1.341-.138-2.651-.389-3.917z"/>
+            </svg>
+          </span>
+          <span class="btn__label" id="btnLoginLabel">Entrar</span>
+        </a>
+        <button class="hamburger" type="button" id="btnMenu" aria-label="Abrir menu" aria-expanded="false">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-const BUCKET = "avatares";
-let currentUser = null;
+  <!-- Mobile Nav -->
+  <aside class="mobile-nav" id="mobileNav" aria-hidden="true">
+    <div class="mobile-nav__panel" role="dialog" aria-modal="true" tabindex="-1">
+      <div class="mobile-nav__top">
+        <a class="brand" href="index.html"><img src="logo.png" alt="Pedro Sites Logo" style="height:32px;width:auto;display:block;object-fit:contain;"/></a>
+        <button class="icon-btn" type="button" id="btnCloseMenu" aria-label="Fechar menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-nav__links">
+        <a class="mobile-nav__link" href="index.html"><div class="mobile-nav__link-content"><strong>Home</strong><span>Início da página</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="servicos.html"><div class="mobile-nav__link-content"><strong>Serviços</strong><span>O que entregamos</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="portfolio.html"><div class="mobile-nav__link-content"><strong>Portfólio</strong><span>Projetos e cases</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="processo.html"><div class="mobile-nav__link-content"><strong>Processo</strong><span>Como trabalhamos</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="sobre.html"><div class="mobile-nav__link-content"><strong>Sobre</strong><span>Nossa história</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="avaliacoes.html"><div class="mobile-nav__link-content"><strong>Avaliações</strong><span>O que dizem de nós</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="contato.html"><div class="mobile-nav__link-content"><strong>Contato</strong><span>Solicitar orçamento</span></div><span class="mobile-nav__arrow">→</span></a>
+      </nav>
+    </div>
+  </aside>
 
-// Elementos
-const loadingScreen   = document.getElementById("loadingScreen");
-const avatarImg       = document.getElementById("avatarImg");
-const avatarPlaceholder = document.getElementById("avatarPlaceholder");
-const fileInput       = document.getElementById("fileInput");
-const uploadProgress  = document.getElementById("uploadProgress");
-const uploadBar       = document.getElementById("uploadBar");
-const inputNome       = document.getElementById("inputNome");
-const inputEmail      = document.getElementById("inputEmail");
-const btnSalvar       = document.getElementById("btnSalvar");
-const btnSair         = document.getElementById("btnSair");
-const statusMsg       = document.getElementById("statusMsg");
-const infoMembro      = document.getElementById("infoMembro");
-const infoProvider    = document.getElementById("infoProvider");
+  <main id="conteudo" class="perfil-page">
+    <div class="perfil-container">
 
-function showStatus(msg, type) {
-  statusMsg.textContent = msg;
-  statusMsg.className = `status ${type} visible`;
-  setTimeout(() => statusMsg.classList.remove("visible"), 4000);
-}
+      <!-- Spinner enquanto carrega -->
+      <div class="pf-spinner" id="pfSpinner">
+        <div></div>
+      </div>
 
-function setAvatar(url, nome) {
-  if (url) {
-    avatarImg.src = url + "?t=" + Date.now();
-    avatarImg.style.display = "block";
-    avatarPlaceholder.style.display = "none";
-  } else {
-    avatarImg.style.display = "none";
-    avatarPlaceholder.style.display = "flex";
-    avatarPlaceholder.textContent = (nome || "?")[0].toUpperCase();
+      <!-- Não logado -->
+      <div class="perfil-card pf-nologin" id="pfNologin">
+        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <p>Você precisa estar logado para editar o perfil.</p>
+        <a href="login.html">Entrar na conta →</a>
+      </div>
+
+      <!-- Conteúdo do perfil (aparece só quando logado) -->
+      <div id="pfContent" style="display:none; display:flex; flex-direction:column; gap:1.5rem;">
+
+        <!-- Foto -->
+        <div class="perfil-card">
+          <div class="perfil-card__title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Foto de Perfil
+          </div>
+          <div class="avatar-area">
+            <label class="avatar-ring" for="avatarFile" title="Clique para trocar a foto">
+              <div class="avatar-init" id="pfAvatarInit">?</div>
+              <img class="avatar-pic" id="pfAvatarImg" src="" alt="Foto de perfil"/>
+              <div class="avatar-overlay">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              </div>
+            </label>
+            <input type="file" id="avatarFile" accept="image/jpeg,image/png,image/webp"/>
+            <div class="avatar-progress" id="pfProgress">
+              <div class="avatar-progress-bar" id="pfProgressBar"></div>
+            </div>
+            <span class="avatar-hint">Clique na foto para trocar · JPG, PNG ou WEBP · máx. 2 MB</span>
+          </div>
+        </div>
+
+        <!-- Editar nome -->
+        <div class="perfil-card">
+          <div class="perfil-card__title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4z"/></svg>
+            Editar Informações
+          </div>
+          <div class="pf-status" id="pfStatus"></div>
+          <div class="pf-group">
+            <label class="pf-label" for="pfNome">Nome completo</label>
+            <input class="pf-input" type="text" id="pfNome" placeholder="Seu nome" maxlength="80"/>
+          </div>
+          <div class="pf-group">
+            <label class="pf-label" for="pfEmail">E-mail</label>
+            <input class="pf-input" type="email" id="pfEmail" disabled/>
+          </div>
+          <button class="pf-btn pf-btn--primary" id="pfBtnSalvar">Salvar alterações</button>
+        </div>
+
+        <!-- Informações -->
+        <div class="perfil-card">
+          <div class="perfil-card__title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Informações da Conta
+          </div>
+          <div class="pf-info-row">
+            <span class="pf-info-label">Membro desde</span>
+            <span class="pf-info-value" id="pfMembro">—</span>
+          </div>
+          <div class="pf-info-row">
+            <span class="pf-info-label">Login via</span>
+            <span class="pf-info-value" id="pfProvider">—</span>
+          </div>
+          <div class="pf-info-row">
+            <span class="pf-info-label">Status</span>
+            <span class="pf-info-value" style="color:#22c55e">✓ Ativo</span>
+          </div>
+        </div>
+
+        <!-- Sair -->
+        <div class="perfil-card">
+          <button class="pf-btn pf-btn--danger" id="pfBtnSair">Sair da conta</button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="three-bg.js" defer></script>
+  <script>
+  // Aguarda o script.js inicializar o Supabase antes de rodar
+  const BUCKET = "avatares";
+  let pfUser = null;
+  let pfClient = null;
+
+  function pfShowStatus(msg, type) {
+    const el = document.getElementById("pfStatus");
+    el.textContent = msg;
+    el.className = "pf-status show " + (type === "ok" ? "ok" : "err");
+    setTimeout(() => el.classList.remove("show"), 4000);
   }
-}
 
-function formatDate(dateStr) {
-  if (!dateStr) return "—";
-  return new Date(dateStr).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
-}
-
-// Carrega dados do usuário
-async function loadProfile() {
-  const { data: { session } } = await client.auth.getSession();
-
-  if (!session) {
-    window.location.href = "login.html";
-    return;
+  function pfSetAvatar(url, nome) {
+    const img = document.getElementById("pfAvatarImg");
+    const init = document.getElementById("pfAvatarInit");
+    if (url) {
+      img.src = url + "?t=" + Date.now();
+      img.style.display = "block";
+      init.style.display = "none";
+    } else {
+      img.style.display = "none";
+      init.style.display = "flex";
+      init.textContent = (nome || "?")[0].toUpperCase();
+    }
   }
 
-  currentUser = session.user;
+  async function pfLoad() {
+    // Pega o cliente Supabase do STATE global (criado pelo script.js)
+    const waitClient = () => new Promise(resolve => {
+      const check = () => {
+        if (window.STATE?.supabase) { resolve(window.STATE.supabase); }
+        else setTimeout(check, 100);
+      };
+      check();
+    });
 
-  // Preenche campos
-  inputEmail.value = currentUser.email || "";
-  infoMembro.textContent = formatDate(currentUser.created_at);
+    pfClient = await waitClient();
 
-  const provider = currentUser.app_metadata?.provider || "email";
-  infoProvider.innerHTML = `<span class="badge-provider">${provider === "google" ? "🌐 Google" : "✉️ E-mail"}</span>`;
+    const { data: { session } } = await pfClient.auth.getSession();
 
-  // Busca perfil no banco
-  const { data: profile } = await client
-    .from("profiles")
-    .select("full_name, avatar_url")
-    .eq("id", currentUser.id)
-    .single();
+    document.getElementById("pfSpinner").style.display = "none";
 
-  const nome = profile?.full_name || currentUser.user_metadata?.full_name || "";
-  inputNome.value = nome;
-  setAvatar(profile?.avatar_url, nome);
+    if (!session) {
+      document.getElementById("pfNologin").classList.add("show");
+      return;
+    }
 
-  loadingScreen.style.display = "none";
-}
+    pfUser = session.user;
+    document.getElementById("pfContent").style.display = "flex";
+    document.getElementById("pfEmail").value = pfUser.email || "";
 
-// Upload de foto
-fileInput.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const created = pfUser.created_at
+      ? new Date(pfUser.created_at).toLocaleDateString("pt-BR", { day:"2-digit", month:"long", year:"numeric" })
+      : "—";
+    document.getElementById("pfMembro").textContent = created;
 
-  // Valida tamanho (2MB)
-  if (file.size > 2 * 1024 * 1024) {
-    showStatus("Imagem muito grande. Máximo 2 MB.", "error");
-    return;
+    const provider = pfUser.app_metadata?.provider || "email";
+    document.getElementById("pfProvider").innerHTML =
+      `<span class="pf-badge">${provider === "google" ? "🌐 Google" : "✉️ E-mail"}</span>`;
+
+    // Busca perfil no banco
+    const { data: profile } = await pfClient
+      .from("profiles")
+      .select("full_name, avatar_url")
+      .eq("id", pfUser.id)
+      .single();
+
+    const nome = profile?.full_name || pfUser.user_metadata?.full_name || "";
+    document.getElementById("pfNome").value = nome;
+    pfSetAvatar(profile?.avatar_url, nome);
   }
 
-  // Valida tipo
-  if (!["image/jpeg","image/png","image/webp","image/gif"].includes(file.type)) {
-    showStatus("Formato inválido. Use JPG, PNG ou WEBP.", "error");
-    return;
-  }
+  // Upload de foto
+  document.getElementById("avatarFile").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file || !pfUser) return;
 
-  uploadProgress.classList.add("visible");
-  uploadBar.style.width = "30%";
+    if (file.size > 2 * 1024 * 1024) { pfShowStatus("Imagem muito grande. Máx. 2 MB.", "err"); return; }
+    if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { pfShowStatus("Use JPG, PNG ou WEBP.", "err"); return; }
 
-  const ext = file.name.split(".").pop();
-  const path = `${currentUser.id}/avatar.${ext}`;
+    const prog = document.getElementById("pfProgress");
+    const bar = document.getElementById("pfProgressBar");
+    prog.classList.add("show");
+    bar.style.width = "30%";
 
-  // Remove foto antiga se existir
-  await client.storage.from(BUCKET).remove([path]);
+    const ext = file.name.split(".").pop();
+    const path = `${pfUser.id}/avatar.${ext}`;
 
-  uploadBar.style.width = "60%";
+    await pfClient.storage.from(BUCKET).remove([path]);
+    bar.style.width = "60%";
 
-  const { error: uploadError } = await client.storage
-    .from(BUCKET)
-    .upload(path, file, { upsert: true, contentType: file.type });
+    const { error } = await pfClient.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
+    if (error) { pfShowStatus("Erro ao enviar foto.", "err"); prog.classList.remove("show"); return; }
 
-  if (uploadError) {
-    showStatus("Erro ao enviar foto. Tente novamente.", "error");
-    uploadProgress.classList.remove("visible");
-    return;
-  }
+    bar.style.width = "85%";
+    const { data: { publicUrl } } = pfClient.storage.from(BUCKET).getPublicUrl(path);
 
-  uploadBar.style.width = "85%";
+    await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, avatar_url: publicUrl });
 
-  // Pega URL pública
-  const { data: { publicUrl } } = client.storage.from(BUCKET).getPublicUrl(path);
+    bar.style.width = "100%";
+    setTimeout(() => prog.classList.remove("show"), 600);
 
-  // Atualiza no banco
-  await client.from("profiles").upsert({
-    id: currentUser.id,
-    email: currentUser.email,
-    avatar_url: publicUrl
+    pfSetAvatar(publicUrl, document.getElementById("pfNome").value);
+
+    // Atualiza o avatar no nav do site também
+    const navImg = document.getElementById("userAvatarImg");
+    const navInit = document.getElementById("userAvatarFallback");
+    if (navImg) { navImg.src = publicUrl + "?t=" + Date.now(); navImg.style.display = "block"; }
+    if (navInit) navInit.style.display = "none";
+
+    pfShowStatus("Foto atualizada!", "ok");
+    e.target.value = "";
   });
 
-  uploadBar.style.width = "100%";
-  setTimeout(() => uploadProgress.classList.remove("visible"), 600);
+  // Salvar nome
+  document.getElementById("pfBtnSalvar").addEventListener("click", async () => {
+    const nome = document.getElementById("pfNome").value.trim();
+    if (!nome) { pfShowStatus("Digite seu nome.", "err"); return; }
 
-  setAvatar(publicUrl, inputNome.value);
-  showStatus("Foto atualizada com sucesso!", "success");
-  fileInput.value = "";
-});
+    const btn = document.getElementById("pfBtnSalvar");
+    btn.disabled = true; btn.textContent = "Salvando...";
 
-// Salvar nome
-btnSalvar.addEventListener("click", async () => {
-  const nome = inputNome.value.trim();
-  if (!nome) { showStatus("Digite seu nome.", "error"); return; }
+    const { error } = await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, full_name: nome });
 
-  btnSalvar.disabled = true;
-  btnSalvar.textContent = "Salvando...";
+    btn.disabled = false; btn.textContent = "Salvar alterações";
 
-  const { error } = await client.from("profiles").upsert({
-    id: currentUser.id,
-    email: currentUser.email,
-    full_name: nome
+    if (error) { pfShowStatus("Erro ao salvar.", "err"); }
+    else {
+      document.getElementById("pfAvatarInit").textContent = nome[0].toUpperCase();
+      // Atualiza nome no badge do nav
+      const badgeText = document.getElementById("userBadgeText");
+      if (badgeText) badgeText.textContent = nome.split(" ")[0];
+      pfShowStatus("Nome salvo com sucesso!", "ok");
+    }
   });
 
-  btnSalvar.disabled = false;
-  btnSalvar.textContent = "Salvar alterações";
+  // Sair
+  document.getElementById("pfBtnSair").addEventListener("click", async () => {
+    await pfClient.auth.signOut();
+    window.location.href = "index.html";
+  });
 
-  if (error) {
-    showStatus("Erro ao salvar. Tente novamente.", "error");
+  // Inicia após DOM carregado
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", pfLoad);
   } else {
-    // Atualiza inicial do placeholder
-    avatarPlaceholder.textContent = nome[0].toUpperCase();
-    showStatus("Nome atualizado com sucesso!", "success");
+    pfLoad();
   }
-});
-
-// Sair
-btnSair.addEventListener("click", async () => {
-  await client.auth.signOut();
-  window.location.href = "login.html";
-});
-
-// Inicia
-loadProfile();
-</script>
+  </script>
 </body>
 </html>
