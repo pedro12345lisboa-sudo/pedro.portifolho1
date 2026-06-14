@@ -17,10 +17,10 @@
 
 const CONFIG = {
   /** URL do projeto Supabase */
-  SUPABASE_URL: "https://gpmxniygvnwkqrgbcyjo.supabase.co",
+  SUPABASE_URL: "https://lutmauhdvdcsblxuncbb.supabase.co",
 
   /** Chave pública (anon) do Supabase — segura para uso no frontend */
-  SUPABASE_ANON_KEY: "sb_publishable_1KnTNp8Lhh9GfVhNPUKY6Q_HkpyMIBY",
+  SUPABASE_ANON_KEY: "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh",
 
   /** Base da API: localhost em dev, /api em produção */
   API_BASE:
@@ -299,62 +299,95 @@ function renderStars(count, total = 5) {
 async function initAuth() {
   const supabaseLib = window.supabase;
   if (!supabaseLib?.createClient) {
+    console.warn("⚠️ [AUTH] Supabase library não disponível");
     renderAuthUI(null);
     return;
   }
 
-  STATE.supabase = supabaseLib.createClient(
-    CONFIG.SUPABASE_URL,
-    CONFIG.SUPABASE_ANON_KEY,
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storageKey: "pedro_sites_auth",
+  try {
+    STATE.supabase = supabaseLib.createClient(
+      CONFIG.SUPABASE_URL,
+      CONFIG.SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          storageKey: "pedro_sites_auth",
+        },
       },
-    },
-  );
+    );
 
-  const { data } = await STATE.supabase.auth.getSession();
-  STATE.session = data?.session || null;
-  renderAuthUI(STATE.session);
+    console.log("✅ [AUTH] Cliente Supabase inicializado");
 
-  STATE.supabase.auth.onAuthStateChange((event, session) => {
-    STATE.session = session;
-    renderAuthUI(session);
-    if (event === "SIGNED_IN")
-      Toast.show(`Bem-vindo, ${getDisplayName(session?.user)}! 👋`, "success");
-    if (event === "SIGNED_OUT")
-      Toast.show("Até logo! Sessão encerrada.", "default");
-  });
+    const { data } = await STATE.supabase.auth.getSession();
+    STATE.session = data?.session || null;
+    
+    if (STATE.session) {
+      console.log("✅ [AUTH] Sessão ativa para:", STATE.session.user.email);
+    } else {
+      console.log("ℹ️ [AUTH] Nenhuma sessão ativa");
+    }
+    
+    renderAuthUI(STATE.session);
 
-  [$("#btnLoginGoogle"), $("#btnLoginGoogleFooter")]
-    .filter(Boolean)
-    .forEach((btn) => btn.addEventListener("click", () => handleAuthClick()));
+    STATE.supabase.auth.onAuthStateChange((event, session) => {
+      STATE.session = session;
+      console.log("🔄 [AUTH] Mudança de autenticação:", event);
+      renderAuthUI(session);
+      if (event === "SIGNED_IN")
+        Toast.show(`Bem-vindo, ${getDisplayName(session?.user)}! 👋`, "success");
+      if (event === "SIGNED_OUT")
+        Toast.show("Até logo! Sessão encerrada.", "default");
+    });
+
+    [$("#btnLoginGoogle"), $("#btnLoginGoogleFooter")]
+      .filter(Boolean)
+      .forEach((btn) => btn.addEventListener("click", () => handleAuthClick()));
+  } catch (e) {
+    console.error("❌ [AUTH] Erro ao inicializar autenticação:", e);
+    renderAuthUI(null);
+  }
 }
 
 /**
  * Alterna entre login e logout conforme estado atual.
  */
 async function handleAuthClick() {
-  if (!STATE.supabase) return;
-
-  if (STATE.session?.user) {
-    const badge = $("#userBadge");
-    if (badge) badge.style.opacity = "0.5";
-    await STATE.supabase.auth.signOut();
-    if (badge) badge.style.opacity = "";
+  if (!STATE.supabase) {
+    console.error("❌ [AUTH] Supabase não inicializado");
     return;
   }
 
-  const redirectTo = `${window.location.origin}${window.location.pathname}`;
-  const { error } = await STATE.supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo },
-  });
+  try {
+    if (STATE.session?.user) {
+      const badge = $("#userBadge");
+      if (badge) badge.style.opacity = "0.5";
+      console.log("🔄 [AUTH] Fazendo logout para:", STATE.session.user.email);
+      await STATE.supabase.auth.signOut();
+      if (badge) badge.style.opacity = "";
+      return;
+    }
 
-  if (error) Toast.show("Não foi possível abrir o login com Google.", "error");
+    const redirectTo = `${window.location.origin}/index.html`;
+    console.log("🔵 [AUTH] Iniciando OAuth redirect:", redirectTo);
+    
+    const { error } = await STATE.supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { 
+        redirectTo,
+        skipBrowserWarning: true 
+      },
+    });
+
+    if (error) {
+      console.error("❌ [AUTH] Erro OAuth:", error);
+      Toast.show("❌ Não foi possível abrir o login com Google: " + (error.message || error), "error");
+    }
+  } catch (e) {
+    console.error("❌ [AUTH] Exceção em handleAuthClick:", e);
+    Toast.show("❌ Erro ao processar autenticação: " + (e.message || e), "error");
+  }
 }
 
 /**
