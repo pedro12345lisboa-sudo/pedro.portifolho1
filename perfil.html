@@ -202,13 +202,13 @@
         </button>
       </div>
       <nav class="mobile-nav__links">
-        <a class="mobile-nav__link" href="index.html"><div class="mobile-nav__link-content"><strong>Home</strong><span>Início da página</span></div><span class="mobile-nav__arrow">→</span></a>
-        <a class="mobile-nav__link" href="servicos.html"><div class="mobile-nav__link-content"><strong>Serviços</strong><span>O que entregamos</span></div><span class="mobile-nav__arrow">→</span></a>
-        <a class="mobile-nav__link" href="portfolio.html"><div class="mobile-nav__link-content"><strong>Portfólio</strong><span>Projetos e cases</span></div><span class="mobile-nav__arrow">→</span></a>
-        <a class="mobile-nav__link" href="processo.html"><div class="mobile-nav__link-content"><strong>Processo</strong><span>Como trabalhamos</span></div><span class="mobile-nav__arrow">→</span></a>
-        <a class="mobile-nav__link" href="sobre.html"><div class="mobile-nav__link-content"><strong>Sobre</strong><span>Nossa história</span></div><span class="mobile-nav__arrow">→</span></a>
-        <a class="mobile-nav__link" href="avaliacoes.html"><div class="mobile-nav__link-content"><strong>Avaliações</strong><span>O que dizem de nós</span></div><span class="mobile-nav__arrow">→</span></a>
-        <a class="mobile-nav__link" href="contato.html"><div class="mobile-nav__link-content"><strong>Contato</strong><span>Solicitar orçamento</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="index.html"><div class="mobile-nav__link-content"><strong>Home</strong><span>Página inicial</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="servicos.html"><div class="mobile-nav__link-content"><strong>Serviços</strong><span>O que eu faço</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="portfolio.html"><div class="mobile-nav__link-content"><strong>Portfólio</strong><span>Projetos entregues</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="processo.html"><div class="mobile-nav__link-content"><strong>Processo</strong><span>Como funciona</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="sobre.html"><div class="mobile-nav__link-content"><strong>Sobre</strong><span>Quem sou eu</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="avaliacoes.html"><div class="mobile-nav__link-content"><strong>Avaliações</strong><span>O que os clientes dizem</span></div><span class="mobile-nav__arrow">→</span></a>
+        <a class="mobile-nav__link" href="contato.html"><div class="mobile-nav__link-content"><strong>Contato</strong><span>Pedir orçamento</span></div><span class="mobile-nav__arrow">→</span></a>
       </nav>
     </div>
   </aside>
@@ -302,17 +302,15 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="three-bg.js" defer></script>
   <script>
-  const pfClient = window.supabase.createClient(
-    "https://lutmauhdvdcsblxuncbb.supabase.co",
-    "sb_publishable_YkAUvidPMrZfQpWiA8Irhg_-3MXpAjh",
-    { auth: { persistSession: true, autoRefreshToken: true, storageKey: "pedro_sites_auth" } }
-  );
+  // Aguarda o script.js inicializar o Supabase antes de rodar
   const BUCKET = "avatares";
   let pfUser = null;
+  let pfClient = null;
 
   function pfShowStatus(msg, type) {
     const el = document.getElementById("pfStatus");
@@ -336,48 +334,57 @@
   }
 
   async function pfLoad() {
-    try {
-      const { data: { session } } = await pfClient.auth.getSession();
-      document.getElementById("pfSpinner").style.display = "none";
+    // Pega o cliente Supabase do STATE global (criado pelo script.js)
+    const waitClient = () => new Promise(resolve => {
+      const check = () => {
+        if (window.STATE?.supabase) { resolve(window.STATE.supabase); }
+        else setTimeout(check, 100);
+      };
+      check();
+    });
 
-      if (!session) {
-        document.getElementById("pfNologin").classList.add("show");
-        return;
-      }
+    pfClient = await waitClient();
 
-      pfUser = session.user;
-      document.getElementById("pfContent").style.display = "flex";
-      document.getElementById("pfEmail").value = pfUser.email || "";
+    const { data: { session } } = await pfClient.auth.getSession();
 
-      const created = pfUser.created_at
-        ? new Date(pfUser.created_at).toLocaleDateString("pt-BR", { day:"2-digit", month:"long", year:"numeric" })
-        : "—";
-      document.getElementById("pfMembro").textContent = created;
+    document.getElementById("pfSpinner").style.display = "none";
 
-      const provider = pfUser.app_metadata?.provider || "email";
-      document.getElementById("pfProvider").innerHTML =
-        provider === "google"
-          ? '<span class="pf-badge">🌐 Google</span>'
-          : '<span class="pf-badge">✉️ E-mail</span>';
-
-      const { data: profile } = await pfClient
-        .from("profiles").select("full_name, avatar_url")
-        .eq("id", pfUser.id).single();
-
-      const nome = profile?.full_name || pfUser.user_metadata?.full_name || "";
-      document.getElementById("pfNome").value = nome;
-      pfSetAvatar(profile?.avatar_url, nome);
-    } catch(err) {
-      console.error("Erro ao carregar perfil:", err);
-      document.getElementById("pfSpinner").style.display = "none";
+    if (!session) {
       document.getElementById("pfNologin").classList.add("show");
+      return;
     }
+
+    pfUser = session.user;
+    document.getElementById("pfContent").style.display = "flex";
+    document.getElementById("pfEmail").value = pfUser.email || "";
+
+    const created = pfUser.created_at
+      ? new Date(pfUser.created_at).toLocaleDateString("pt-BR", { day:"2-digit", month:"long", year:"numeric" })
+      : "—";
+    document.getElementById("pfMembro").textContent = created;
+
+    const provider = pfUser.app_metadata?.provider || "email";
+    document.getElementById("pfProvider").innerHTML =
+      `<span class="pf-badge">${provider === "google" ? "🌐 Google" : "✉️ E-mail"}</span>`;
+
+    // Busca perfil no banco
+    const { data: profile } = await pfClient
+      .from("profiles")
+      .select("full_name, avatar_url")
+      .eq("id", pfUser.id)
+      .single();
+
+    const nome = profile?.full_name || pfUser.user_metadata?.full_name || "";
+    document.getElementById("pfNome").value = nome;
+    pfSetAvatar(profile?.avatar_url, nome);
   }
 
-  document.getElementById("avatarFile").addEventListener("change", async function(e) {
+  // Upload de foto
+  document.getElementById("avatarFile").addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (!file || !pfUser) return;
-    if (file.size > 2 * 1024 * 1024) { pfShowStatus("Imagem muito grande. Max 2 MB.", "err"); return; }
+
+    if (file.size > 2 * 1024 * 1024) { pfShowStatus("Imagem muito grande. Máx. 2 MB.", "err"); return; }
     if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { pfShowStatus("Use JPG, PNG ou WEBP.", "err"); return; }
 
     const prog = document.getElementById("pfProgress");
@@ -386,47 +393,76 @@
     bar.style.width = "30%";
 
     const ext = file.name.split(".").pop();
-    const path = pfUser.id + "/avatar." + ext;
+    const path = `${pfUser.id}/avatar.${ext}`;
+
     await pfClient.storage.from(BUCKET).remove([path]);
     bar.style.width = "60%";
 
-    const res = await pfClient.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
-    if (res.error) { pfShowStatus("Erro: " + res.error.message, "err"); prog.classList.remove("show"); return; }
+    const { error } = await pfClient.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
+    if (error) { pfShowStatus("Erro ao enviar foto.", "err"); prog.classList.remove("show"); return; }
 
     bar.style.width = "85%";
-    const urlRes = pfClient.storage.from(BUCKET).getPublicUrl(path);
-    const publicUrl = urlRes.data.publicUrl;
+    const { data: { publicUrl } } = pfClient.storage.from(BUCKET).getPublicUrl(path);
+
     await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, avatar_url: publicUrl });
+
     bar.style.width = "100%";
-    setTimeout(function() { prog.classList.remove("show"); }, 600);
+    setTimeout(() => prog.classList.remove("show"), 600);
+
     pfSetAvatar(publicUrl, document.getElementById("pfNome").value);
+
+    // Atualiza o avatar no nav do site também
+    const navImg = document.getElementById("userAvatarImg");
+    const navInit = document.getElementById("userAvatarFallback");
+    if (navImg) { navImg.src = publicUrl + "?t=" + Date.now(); navImg.style.display = "block"; }
+    if (navInit) navInit.style.display = "none";
+
     pfShowStatus("Foto atualizada!", "ok");
     e.target.value = "";
   });
 
-  document.getElementById("pfBtnSalvar").addEventListener("click", async function() {
-    if (!pfUser) { pfShowStatus("Sessao expirada. Recarregue a pagina.", "err"); return; }
+  // Salvar nome
+  document.getElementById("pfBtnSalvar").addEventListener("click", async () => {
     const nome = document.getElementById("pfNome").value.trim();
     if (!nome) { pfShowStatus("Digite seu nome.", "err"); return; }
+    if (!pfClient) { pfShowStatus("Aguarde o carregamento. Tente novamente.", "err"); return; }
+
     const btn = document.getElementById("pfBtnSalvar");
-    btn.disabled = true;
-    btn.textContent = "Salvando...";
-    const res = await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, full_name: nome });
-    btn.disabled = false;
-    btn.textContent = "Salvar alteracoes";
-    if (res.error) { pfShowStatus("Erro: " + res.error.message, "err"); }
-    else { document.getElementById("pfAvatarInit").textContent = nome[0].toUpperCase(); pfShowStatus("Nome salvo!", "ok"); }
+    btn.disabled = true; btn.textContent = "Salvando...";
+
+    const { error } = await pfClient.from("profiles").upsert({ id: pfUser.id, email: pfUser.email, full_name: nome });
+
+    btn.disabled = false; btn.textContent = "Salvar alterações";
+
+    if (error) { pfShowStatus("Erro ao salvar: " + error.message, "err"); }
+    else {
+      document.getElementById("pfAvatarInit").textContent = nome[0].toUpperCase();
+      const badgeText = document.getElementById("userBadgeText");
+      if (badgeText) badgeText.textContent = nome.split(" ")[0];
+      pfShowStatus("Nome salvo com sucesso!", "ok");
+    }
   });
 
-  document.getElementById("pfBtnSair").addEventListener("click", async function() {
+  // Sair
+  document.getElementById("pfBtnSair").addEventListener("click", async () => {
     await pfClient.auth.signOut();
     window.location.href = "index.html";
   });
 
-  pfLoad();
+  // Inicia após DOM e script.js carregados
+  function tryPfLoad() {
+    if (window.STATE?.supabase) {
+      pfLoad();
+    } else {
+      setTimeout(tryPfLoad, 150);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", tryPfLoad);
+  } else {
+    tryPfLoad();
+  }
   </script>
-  <script src="script.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="three-bg.js" defer></script>
 </body>
 </html>
